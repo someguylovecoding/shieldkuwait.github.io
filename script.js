@@ -471,6 +471,30 @@ function switchTab(id,el){
   document.getElementById('page-'+id).classList.add('active');
   el.classList.add('active');
   if(id==='map' && leafletMap) setTimeout(function(){ leafletMap.invalidateSize(); },100);
+  closeMobileSidebar();
+}
+
+// ══════════════════════════════════════════
+// MOBILE SIDEBAR TOGGLE
+// ══════════════════════════════════════════
+function toggleMobileSidebar(){
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sidebarOverlay');
+  if(!sb || !ov) return;
+  var isOpen = sb.classList.contains('mobile-open');
+  if(isOpen){ closeMobileSidebar(); } else {
+    sb.classList.add('mobile-open');
+    ov.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+}
+function closeMobileSidebar(){
+  var sb = document.getElementById('sidebar');
+  var ov = document.getElementById('sidebarOverlay');
+  if(!sb || !ov) return;
+  sb.classList.remove('mobile-open');
+  ov.classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // ══════════════════════════════════════════
