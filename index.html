@@ -17,6 +17,7 @@
     <div class="logo-text">SHIELD<span>KW</span></div>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMobileSidebar()" aria-label="Menu">☰</button>
     <div class="hbadge"><span class="hdot"></span><span data-i18n="live-feed">LIVE THREAT FEED</span></div>
     <div id="clock"></div>
     <button id="langBtn" onclick="toggleLang()" style="font-size:0.65rem;font-family:monospace;padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--accent);cursor:pointer;letter-spacing:1px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">عربي</button>
@@ -51,7 +52,8 @@
   <!-- ══ PAGE: MAP ══ -->
   <div class="page active" id="page-map">
     <div class="layout">
-      <aside class="sidebar">
+      <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
+      <aside class="sidebar" id="sidebar">
         <div class="sidebar-stats">
           <div class="mini-stat">
             <div class="mini-stat-icon" style="background:rgba(0,212,255,0.1);color:var(--accent);">📊</div>
