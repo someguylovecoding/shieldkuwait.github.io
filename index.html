@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ShieldKW — AI Cybersecurity Platform</title>
+<title>ShieldKW — Kuwait Cybersecurity Awareness Platform</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="styles.css">
@@ -29,13 +29,13 @@
     <span class="tab-icon">🗺️</span> <span data-i18n="tab-map">Community Threat Map</span>
   </div>
   <div class="tab" onclick="switchTab('ai',this)">
-    <span class="tab-icon">🤖</span> <span data-i18n="tab-ai">AI Scam Validator</span>
+    <span class="tab-icon">🔍</span> <span data-i18n="tab-ai">Scam Detector</span>
   </div>
   <div class="tab" onclick="switchTab('sim',this)">
     <span class="tab-icon">🎯</span> <span data-i18n="tab-sim">Phishing Simulator</span>
   </div>
   <div class="tab" onclick="switchTab('kb',this)">
-    <span class="tab-icon">📚</span> <span data-i18n="tab-kb">Knowledge Base</span>
+    <span class="tab-icon">📚</span> <span data-i18n="tab-kb">Knowledge Base</span> <span class="tab-badge" id="kbCount"></span>
   </div>
   <div class="tab" onclick="switchTab('stats',this)">
     <span class="tab-icon">📊</span> <span data-i18n="tab-stats">Statistics</span>
@@ -52,27 +52,39 @@
   <div class="page active" id="page-map">
     <div class="layout">
       <aside class="sidebar">
-        <div class="stats-grid">
-          <div class="stat-cell"><div class="snum c1" id="sTotal">8</div><div class="slbl" data-i18n="total-reports">Total Reports</div></div>
-          <div class="stat-cell"><div class="snum c2" id="sWeek">8</div><div class="slbl" data-i18n="this-week">This Week</div></div>
-          <div class="stat-cell"><div class="snum c3" id="sCrit">2</div><div class="slbl" data-i18n="critical">Critical</div></div>
-          <div class="stat-cell"><div class="snum c4" id="sTypes">4</div><div class="slbl" data-i18n="threat-types">Threat Types</div></div>
+        <div class="sidebar-stats">
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:rgba(0,212,255,0.1);color:var(--accent);">📊</div>
+            <div><div class="snum c1" id="sTotal">8</div><div class="slbl" data-i18n="total-reports">Total Reports</div></div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:rgba(0,255,136,0.1);color:var(--green);">📅</div>
+            <div><div class="snum c2" id="sWeek">8</div><div class="slbl" data-i18n="this-week">This Week</div></div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:rgba(255,60,90,0.1);color:var(--red);">🚨</div>
+            <div><div class="snum c3" id="sCrit">2</div><div class="slbl" data-i18n="critical">Critical</div></div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:rgba(245,166,35,0.1);color:var(--orange);">🏷️</div>
+            <div><div class="snum c4" id="sTypes">4</div><div class="slbl" data-i18n="threat-types">Threat Types</div></div>
+          </div>
         </div>
-        <div class="sec-lbl" data-i18n="filter-lbl">// filter by severity</div>
-        <div class="filter-bar">
-          <button class="fbtn on" onclick="setFilter('all',this)" data-i18n="f-all">All</button>
-          <button class="fbtn fc" onclick="setFilter('Critical',this)" data-i18n="f-critical">Critical</button>
-          <button class="fbtn fh" onclick="setFilter('High',this)" data-i18n="f-high">High</button>
-          <button class="fbtn"    onclick="setFilter('Medium',this)" data-i18n="f-medium">Medium</button>
-          <button class="fbtn fl" onclick="setFilter('Low',this)" data-i18n="f-low">Low</button>
+        <div class="filter-section">
+          <div class="sec-lbl" data-i18n="filter-lbl">// filter by severity</div>
+          <div class="filter-bar">
+            <button class="fbtn on" onclick="setFilter('all',this)" data-i18n="f-all">All</button>
+            <button class="fbtn fc" onclick="setFilter('Critical',this)" data-i18n="f-critical">Critical</button>
+            <button class="fbtn fh" onclick="setFilter('High',this)" data-i18n="f-high">High</button>
+            <button class="fbtn"    onclick="setFilter('Medium',this)" data-i18n="f-medium">Medium</button>
+            <button class="fbtn fl" onclick="setFilter('Low',this)" data-i18n="f-low">Low</button>
+          </div>
         </div>
         <div class="sec-lbl" data-i18n="recent-reports">// recent reports</div>
         <div class="report-list" id="reportList"></div>
         <div class="sidebar-foot">
-          <div style="display:flex;gap:6px;margin-bottom:6px;">
-            <button class="rep-btn" onclick="openModal()" data-i18n="report-scam" style="flex:1;">⚠ Report a Scam</button>
-            <button class="export-btn" onclick="exportReports()" title="Export Reports">📋 <span data-i18n="export-btn">Export</span></button>
-          </div>
+          <button class="rep-btn" onclick="openModal()" data-i18n="report-scam">⚠ Report a Scam</button>
+          <button class="export-btn" onclick="exportReports()" title="Export Reports">📋 <span data-i18n="export-btn">Export</span></button>
         </div>
       </aside>
 
@@ -83,6 +95,13 @@
           <div class="tt-desc" id="ttDesc"></div>
           <div class="tt-tags" id="ttTags"></div>
         </div>
+        <div class="map-legend">
+          <div class="legend-title" data-i18n="map-legend">Legend</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#ff3c5a;box-shadow:0 0 6px #ff3c5a;"></span><span data-i18n="f-critical">Critical</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#f5a623;box-shadow:0 0 6px #f5a623;"></span><span data-i18n="f-high">High</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff;"></span><span data-i18n="f-medium">Medium</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#00ff88;box-shadow:0 0 6px #00ff88;"></span><span data-i18n="f-low">Low</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -91,8 +110,8 @@
   <div class="page" id="page-ai">
     <div class="ai-page grid-bg">
       <div class="ai-hero">
-        <h2 data-i18n="ai-title">🤖 AI Scam Validator</h2>
-        <p data-i18n="ai-subtitle">Paste any suspicious message, SMS, email, or link below. Our AI will analyze it for phishing signals, scam patterns, and threats specific to Kuwait.</p>
+        <h2 data-i18n="ai-title">🔍 Scam Detector</h2>
+        <p data-i18n="ai-subtitle">Paste any suspicious message, SMS, email, or link below. Our pattern-based engine will analyze it for phishing signals, scam patterns, and threats specific to Kuwait.</p>
       </div>
       <div class="examples-row">
         <span class="ex-label" data-i18n="ai-try">Try:</span>
@@ -103,12 +122,14 @@
         <button class="ex-btn" onclick="loadExample(4)"><span>✅</span> <span data-i18n="ex-legit">Legit Message</span></button>
       </div>
       <div class="ai-input-wrap">
-        <textarea class="ai-textarea" id="aiInput" data-i18n-placeholder="ai-placeholder" placeholder="Paste suspicious message here...&#10;&#10;Example: 'عزيزي المواطن، بطاقتك المدنية انتهت صلاحيتها. يرجى التجديد الفوري على الرابط: http://moi-kw.info/renew'"></textarea>
+        <textarea class="ai-textarea" id="aiInput" dir="auto" data-i18n-placeholder="ai-placeholder" placeholder="Paste suspicious message here...&#10;&#10;Example: 'عزيزي المواطن، بطاقتك المدنية انتهت صلاحيتها. يرجى التجديد الفوري على الرابط: http://moi-kw.info/renew'" oninput="updateCharCount(this.value.length)"></textarea>
         <div class="ai-controls">
           <button class="ai-btn" id="aiBtn" onclick="runValidator()">
             <span>🔍</span> <span data-i18n="analyze-btn">Analyze Message</span>
           </button>
+          <button onclick="clearDetector()" style="background:none;border:1px solid var(--border);color:var(--muted2);border-radius:7px;padding:8px 14px;font-size:0.75rem;cursor:pointer;transition:all 0.15s;font-family:monospace;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'" id="clearBtn" data-i18n="clear-btn">✕ Clear</button>
           <span class="ai-hint" data-i18n="ai-hint">Supports Arabic & English</span>
+          <span id="aiCharCount" style="font-size:0.6rem;color:var(--muted);font-family:monospace;margin-left:auto;"></span>
         </div>
       </div>
       <div class="ai-result" id="aiResult">
@@ -117,7 +138,7 @@
           <div class="risk-label" data-i18n="risk-score">RISK SCORE</div>
           <div class="risk-bar"><div class="risk-fill" id="riskFill"></div></div>
           <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:0.6rem;color:var(--muted2);font-family:monospace;">
-            <span>LOW</span><span>MEDIUM</span><span>HIGH</span><span>CRITICAL</span>
+            <span data-i18n="risk-low">LOW</span><span data-i18n="risk-med">MEDIUM</span><span data-i18n="risk-high-lbl">HIGH</span><span data-i18n="risk-crit-lbl">CRITICAL</span>
           </div>
         </div>
         <div class="result-signals" id="resultSignals"></div>
@@ -137,6 +158,8 @@
         <span id="simQNum">Q 1/5</span>
         <div class="progress-bar"><div class="progress-fill" id="simProgress" style="width:0%"></div></div>
         <span id="simScore">Score: 0</span>
+        <span id="simStreak" style="font-size:0.7rem;color:#f5a623;font-weight:700;min-width:48px;"></span>
+        <span id="simBest" style="font-size:0.6rem;color:var(--muted2);font-family:monospace;"></span>
       </div>
       <div class="scenario-card" id="scenarioCard">
         <div class="scenario-top">
@@ -197,7 +220,7 @@
 
       <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 2px 0;">
         <span style="font-size:0.6rem;color:var(--muted2);font-family:monospace;">
-          🕐 Last updated: <span id="st-lastupdate">—</span> &nbsp;·&nbsp; auto-refresh every 60s
+          🕐 Last updated: <span id="st-lastupdate">—</span>
         </span>
         <button onclick="renderStats(true)" data-i18n="refresh-now" style="font-size:0.6rem;color:var(--accent);background:none;border:1px solid var(--border);border-radius:4px;padding:3px 9px;cursor:pointer;font-family:monospace;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
           ↻ Refresh Now
@@ -225,6 +248,11 @@
           <div class="chart-title" id="st-tl-title">// reports timeline</div>
           <div class="timeline" id="st-timeline"></div>
         </div>
+        <!-- By Governorate -->
+        <div class="chart-box">
+          <div class="chart-title" data-i18n="gov-chart">// incidents by governorate</div>
+          <div id="st-gov-bars" style="display:flex;flex-direction:column;gap:10px;margin-top:6px;"></div>
+        </div>
       </div>
 
     </div>
@@ -246,14 +274,14 @@
           <p data-i18n="about-f1-desc">Real-time interactive map showing reported cyber threats across all Kuwait governorates. Filter by severity, explore by area, and report new threats.</p>
         </div>
         <div class="about-card">
-          <div class="about-card-icon">🤖</div>
-          <h3 data-i18n="about-f2-title">AI Scam Validator</h3>
-          <p data-i18n="about-f2-desc">Paste any suspicious message and our AI engine analyzes it for 40+ Kuwait-specific scam patterns — from fake KNET alerts to relative impersonation scams.</p>
+          <div class="about-card-icon">🔍</div>
+          <h3 data-i18n="about-f2-title">Scam Detector</h3>
+          <p data-i18n="about-f2-desc">Paste any suspicious message and our pattern-based engine analyzes it for 50+ Kuwait-specific scam patterns — from fake KNET alerts to rental scams and chain messages.</p>
         </div>
         <div class="about-card">
           <div class="about-card-icon">🎯</div>
           <h3 data-i18n="about-f3-title">Phishing Simulator</h3>
-          <p data-i18n="about-f3-desc">Interactive quiz with 15 real-world Kuwaiti scam scenarios. Test your ability to identify phishing, social engineering, and fraud attempts.</p>
+          <p data-i18n="about-f3-desc">Interactive quiz with 42 real-world Kuwaiti scam scenarios — 20 randomly selected each session. Test your ability to identify phishing, social engineering, and fraud attempts.</p>
         </div>
         <div class="about-card">
           <div class="about-card-icon">📚</div>
@@ -263,7 +291,7 @@
         <div class="about-card">
           <div class="about-card-icon">📊</div>
           <h3 data-i18n="about-f5-title">Live Statistics</h3>
-          <p data-i18n="about-f5-desc">Real-time dashboard with threat breakdowns by type, severity, area, and timeline — auto-refreshed every 60 seconds.</p>
+          <p data-i18n="about-f5-desc">Real-time dashboard with threat breakdowns by type, severity, area, governorate, and timeline. Refresh anytime with the Refresh Now button.</p>
         </div>
         <div class="about-card">
           <div class="about-card-icon">🌐</div>
@@ -277,15 +305,32 @@
         <h3 data-i18n="about-tech-title">Technology Stack</h3>
         <p data-i18n="about-tech-desc">Built with modern web technologies for a fast, responsive, and secure experience.</p>
         <div class="about-tech">
-          <span class="about-tech-tag">HTML5</span>
-          <span class="about-tech-tag">CSS3</span>
-          <span class="about-tech-tag">JavaScript</span>
-          <span class="about-tech-tag">Leaflet.js</span>
-          <span class="about-tech-tag">OpenStreetMap</span>
-          <span class="about-tech-tag">Regex NLP Engine</span>
-          <span class="about-tech-tag">i18n System</span>
-          <span class="about-tech-tag">CSS Grid & Flexbox</span>
-          <span class="about-tech-tag">Glassmorphism UI</span>
+          <span class="about-tech-tag">HTML5 Semantic</span>
+          <span class="about-tech-tag">CSS3 / Animations</span>
+          <span class="about-tech-tag">Vanilla JavaScript (ES5)</span>
+          <span class="about-tech-tag">Leaflet.js Maps</span>
+          <span class="about-tech-tag">CartoDB Dark Tiles</span>
+          <span class="about-tech-tag">Pattern-Based NLP</span>
+          <span class="about-tech-tag">Bilingual i18n Engine</span>
+          <span class="about-tech-tag">LocalStorage API</span>
+          <span class="about-tech-tag">Responsive Flexbox / Grid</span>
+          <span class="about-tech-tag">Web Accessibility (WCAG)</span>
+          <span class="about-tech-tag">CSV Data Export</span>
+          <span class="about-tech-tag">Real-Time Data Rotation</span>
+        </div>
+      </div>
+
+      <div class="about-card" style="max-width:900px;width:100%;">
+        <div class="about-card-icon">⚡</div>
+        <h3 data-i18n="about-highlights-title">Project Highlights</h3>
+        <p data-i18n="about-highlights-desc">Key numbers and achievements of the ShieldKW platform.</p>
+        <div class="about-highlights-grid">
+          <div class="about-highlight-item"><span class="about-hl-num">50+</span><span class="about-hl-label" data-i18n="hl-reports">Demo Threat Reports</span></div>
+          <div class="about-highlight-item"><span class="about-hl-num">42</span><span class="about-hl-label" data-i18n="hl-scenarios">Phishing Scenarios</span></div>
+          <div class="about-highlight-item"><span class="about-hl-num">18</span><span class="about-hl-label" data-i18n="hl-articles">Knowledge Articles</span></div>
+          <div class="about-highlight-item"><span class="about-hl-num">80+</span><span class="about-hl-label" data-i18n="hl-rules">Scam Detection Rules</span></div>
+          <div class="about-highlight-item"><span class="about-hl-num">2</span><span class="about-hl-label" data-i18n="hl-langs">Languages (EN/AR)</span></div>
+          <div class="about-highlight-item"><span class="about-hl-num">6</span><span class="about-hl-label" data-i18n="hl-govs">Governorates Covered</span></div>
         </div>
       </div>
 
@@ -299,10 +344,10 @@
 </div><!-- /main -->
 
 <!-- REPORT MODAL -->
-<div class="mbg" id="modalBg">
+<div class="mbg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <button class="xbtn" onclick="closeModal()">✕</button>
-    <div class="mhd" data-i18n="modal-title">Report a New Threat</div>
+    <div class="mhd" id="modalTitle" data-i18n="modal-title">Report a New Threat</div>
     <div class="fg"><label class="fl" data-i18n="modal-title-lbl">Scam Title *</label><input class="fi" id="fTitle" type="text" placeholder="e.g. Fake Civil ID renewal SMS"/></div>
     <div class="fg"><label class="fl" data-i18n="modal-desc-lbl">Description</label><textarea class="fta" id="fDesc" placeholder="Describe what happened..."></textarea></div>
     <div class="frow">
@@ -365,7 +410,7 @@
   </div>
 </div>
 <!-- KB Detail Modal -->
-<div class="kb-modal-bg" id="kbModalBg">
+<div class="kb-modal-bg" id="kbModalBg" role="dialog" aria-modal="true" aria-labelledby="kbMTitle">
   <div class="kb-modal">
     <div class="kb-modal-head">
       <div class="kb-modal-icon" id="kbMIcon"></div>
