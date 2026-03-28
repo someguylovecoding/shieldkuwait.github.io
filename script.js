@@ -26,18 +26,40 @@ var I18N = {
   'recent-reports':{en:'// recent reports', ar:'// آخر البلاغات'},
   'report-scam':   {en:'⚠ Report a Scam', ar:'⚠ بلّغ عن نصبة'},
   // AI page
-  'ai-title':      {en:'🔍 Scam Detector', ar:'🔍 كاشف النصب'},
-  'ai-subtitle':   {en:'Paste any suspicious message, SMS, email, or link below. Our pattern-based engine will analyze it for phishing signals, scam patterns, and threats specific to Kuwait.', ar:'الصق أي رسالة مشبوهة أو رابط في الأسفل. المحرك سيحللها ويكشف الأنماط الاحتيالية والتهديدات الخاصة بالكويت.'},
-  'analyze-btn':   {en:'🔍 Analyze Message', ar:'🔍 تحليل الرسالة'},
+  'ai-title':       {en:'Scam Detector', ar:'كاشف الاحتيال'},
+  'ai-subtitle':    {en:'Paste any suspicious message, SMS, email, or link. The engine analyzes it for phishing signals and scam patterns specific to Kuwait.', ar:'الصق أي رسالة مشبوهة أو SMS أو إيميل أو رابط. المحرك يحللها لأنماط تصيد واحتيال خاصة بالكويت.'},
+  'stat-patterns':  {en:'Detection Patterns', ar:'نمط كشف'},
+  'stat-bilingual': {en:'Arabic & English', ar:'عربي وإنجليزي'},
+  'stat-kuwait':    {en:'Kuwait', ar:'خاص بالكويت'},
+  'paste-label':    {en:'PASTE SUSPICIOUS MESSAGE', ar:'الصق الرسالة المشبوهة'},
+  'analyze-btn':    {en:'Analyze', ar:'تحليل'},
   'analyzing':     {en:'⏳ Analyzing...', ar:'⏳ جاري التحليل...'},
   'ai-hint':       {en:'Supports Arabic & English', ar:'يدعم العربي والإنجليزي'},
   'risk-score':    {en:'RISK SCORE', ar:'درجة الخطر'},
   // Simulator
-  'sim-title':     {en:'🎯 Phishing Simulator', ar:'🎯 محاكي التصيد'},
-  'sim-subtitle':  {en:'Test your ability to spot real Kuwaiti scams. Can you identify the threat?', ar:'اختبر قدرتك على اكتشاف النصب الكويتي. هل تستطيع تحديد التهديد؟'},
-  'sim-next':      {en:'Next Scenario →', ar:'السيناريو التالي →'},
-  'try-again':     {en:'🔄 Try Again', ar:'🔄 حاول مجدداً'},
-  'score-label':   {en:'out of', ar:'من'},
+  'sim-title':      {en:'Phishing Simulator', ar:'محاكي التصيد'},
+  'sim-subtitle':   {en:'Test your ability to spot real Kuwaiti scams. Can you identify the threat?', ar:'اختبر قدرتك على اكتشاف النصب الكويتي. هل تستطيع تحديد التهديد؟'},
+  'sim-next':       {en:'Next Scenario →', ar:'السيناريو التالي →'},
+  'try-again':      {en:'🔄 Try Again', ar:'🔄 العب مجدداً'},
+  'score-label':    {en:'out of 20', ar:'من أصل 20'},
+  'stat-scenarios': {en:'Scenarios', ar:'سيناريو'},
+  'stat-random':    {en:'Randomized', ar:'عشوائي'},
+  // KB hero
+  'kb-title':       {en:'Knowledge Base', ar:'قاعدة المعرفة'},
+  'kb-subtitle':    {en:'Curated cybersecurity articles with links to official sources', ar:'مقالات أمن سيبراني منتقاة مع روابط للمصادر الرسمية'},
+  'stat-articles':  {en:'Articles', ar:'مقالة'},
+  'stat-sources':   {en:'Official Sources', ar:'مصادر رسمية'},
+  'stat-kuwaitfocus':{en:'Kuwait Focus', ar:'محتوى كويتي'},
+  'kbf-all':        {en:'All', ar:'الكل'},
+  'kbf-kuwait':     {en:'Kuwait', ar:'كويت'},
+  'kbf-tools':      {en:'Tools', ar:'أدوات'},
+  'kbf-security':   {en:'Security', ar:'أمان'},
+  'kbf-privacy':    {en:'Privacy', ar:'خصوصية'},
+  'kbf-banking':    {en:'Banking', ar:'بنوك'},
+  'kbf-family':     {en:'Family', ar:'عائلة'},
+  // Stats page hero
+  'stats-title':    {en:'Live Statistics', ar:'إحصاءات حية'},
+  'stats-subtitle': {en:'Real-time threat intelligence dashboard for Kuwait — updated live from community reports.', ar:'لوحة استخبارات التهديدات الحية للكويت — تُحدَّث لحظياً من بلاغات المجتمع.'},
   // Stats
   'total-incidents':{en:'Total Incidents', ar:'إجمالي الحوادث'},
   'stat-critical':  {en:'Critical', ar:'حرج'},
@@ -82,7 +104,7 @@ var I18N = {
   'about-f3-title': {en:'Phishing Simulator', ar:'محاكي التصيد'},
   'about-f3-desc':  {en:'Interactive quiz with 42 real-world Kuwaiti scam scenarios — 20 randomly selected each session. Test your ability to identify phishing, social engineering, and fraud attempts.', ar:'اختبار تفاعلي مع 42 سيناريو احتيال كويتي حقيقي — 20 يتم اختيارها عشوائياً كل جلسة. اختبر قدرتك على اكتشاف التصيد والهندسة الاجتماعية ومحاولات الاحتيال.'},
   'about-f4-title': {en:'Knowledge Base', ar:'قاعدة المعرفة'},
-  'about-f4-desc':  {en:'18 comprehensive cybersecurity articles covering NIST frameworks, Kuwait cybercrime law, bank security, social media privacy, and more.', ar:'18 مقالة شاملة في الأمن السيبراني تغطي أطر NIST وقانون الجرائم المعلوماتية الكويتي وأمان البنوك وخصوصية السوشيال ميديا والمزيد.'},
+  'about-f4-desc':  {en:'24 comprehensive cybersecurity articles with real links to official sources — covering NIST, Kuwait law, banking, privacy tools, and more.', ar:'24 مقالة شاملة في الأمن السيبراني مع روابط حقيقية للمصادر الرسمية — تغطي أطر NIST وقانون الجرائم المعلوماتية الكويتي والبنوك والخصوصية وأدوات الأمان المجانية والمزيد.'},
   'about-f5-title': {en:'Live Statistics', ar:'إحصاءات حية'},
   'about-f5-desc':  {en:'Real-time dashboard with threat breakdowns by type, severity, area, governorate, and timeline. Refresh anytime with the Refresh Now button.', ar:'لوحة تحكم حية مع تفاصيل التهديدات حسب النوع والخطورة والمنطقة والمحافظة والجدول الزمني. حدّث في أي وقت بزر التحديث.'},
   'about-f6-title': {en:'Full Bilingual Support', ar:'دعم ثنائي اللغة كامل'},
@@ -946,7 +968,7 @@ function runValidator(){
     showResult(result);
     btn.disabled=false;
     var aspan=document.querySelector('#aiBtn [data-i18n="analyze-btn"]');
-    if(aspan) aspan.textContent=t('analyze-btn'); else btn.innerHTML='<span>🔍</span> '+t('analyze-btn').replace('🔍 ','');
+    if(aspan) aspan.textContent=t('analyze-btn'); else btn.innerHTML='<span>🔍</span> <span data-i18n="analyze-btn">'+t('analyze-btn')+'</span>';
   },1200);
 }
 
@@ -1348,101 +1370,92 @@ function analyzeMessage(msg){
 function showResult(r){
   var res=document.getElementById('aiResult');
   res.classList.add('show');
-  var signalsLabel = t('signals-detected');
-  var riskScoreLabel = t('risk-score-colon');
-  window._copyResultTxt = r.subLabel+' | '+riskScoreLabel+' '+r.score+'/100 | ShieldKW';
+  var signalsLabel=t('signals-detected');
+  var riskScoreLabel=t('risk-score-colon');
+  window._copyResultTxt=r.subLabel+' | '+riskScoreLabel+' '+r.score+'/100 | ShieldKW';
+
+  // ── Verdict banner
   document.getElementById('resultHeader').innerHTML=
-    '<span style="font-size:22px">'+r.emoji+'</span>'+
-    '<div style="flex:1;">'+
-      '<div style="font-size:0.9rem;font-weight:800;color:'+r.color+'">'+r.subLabel+'</div>'+
-      '<div style="font-size:0.65rem;color:var(--muted2);font-family:monospace;margin-top:3px">'+riskScoreLabel+' '+r.score+'/100 &nbsp;|&nbsp; '+r.signals.length+' '+signalsLabel+'</div>'+
+    '<span class="verdict-emoji">'+r.emoji+'</span>'+
+    '<div class="verdict-body">'+
+      '<div class="verdict-label" style="color:'+r.color+'">'+r.subLabel+'</div>'+
+      '<div class="verdict-sub">'+riskScoreLabel+' '+r.score+'/100 &nbsp;·&nbsp; '+r.signals.length+' '+signalsLabel+'</div>'+
     '</div>'+
-    '<button onclick="copyResultSummary()" title="'+t('copy-result-btn')+'" style="flex-shrink:0;background:var(--panel);border:1px solid var(--border);color:var(--muted2);border-radius:6px;padding:5px 10px;font-size:0.62rem;cursor:pointer;font-family:monospace;transition:all 0.15s;" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted2)\'">📋</button>';
+    '<button class="verdict-copy" onclick="copyResultSummary()" title="'+t('copy-result-btn')+'">📋 '+t('copy-result-btn')+'</button>';
+
+  // ── Risk bar
   var fill=document.getElementById('riskFill');
   fill.style.width='0%'; fill.style.background=r.color;
-  setTimeout(function(){fill.style.width=r.score+'%';},50);
+  setTimeout(function(){fill.style.width=r.score+'%';},60);
 
+  // ── Signal cards
   var sigs='';
   r.signals.forEach(function(s){
-    var catBadge = s.cat ? '<span style="font-size:0.52rem;padding:1px 6px;border-radius:3px;background:rgba(255,255,255,0.06);color:var(--muted2);border:1px solid var(--border);margin-left:6px;vertical-align:middle">'+rt(s.cat)+'</span>' : '';
-    sigs+='<div class="signal-item"><span class="signal-icon">'+s.icon+'</span><span class="signal-text">'+catBadge+' '+rt(s.text)+'</span></div>';
+    var cls=s.icon==='🔴'?'sig-red':s.icon==='🟠'?'sig-orange':s.icon==='🟡'?'sig-yellow':'sig-green';
+    var catBadge=s.cat?'<span class="signal-cat">'+rt(s.cat)+'</span>':'';
+    sigs+='<div class="signal-card '+cls+'">'+
+      '<span class="signal-icon-lg">'+s.icon+'</span>'+
+      '<div class="signal-body">'+catBadge+
+        '<span class="signal-txt">'+rt(s.text)+'</span>'+
+      '</div></div>';
   });
   document.getElementById('resultSignals').innerHTML=sigs;
 
-  // ── بناء لوحة الإجراءات الفورية
-  var msg = document.getElementById('aiInput').value;
-  var urlMatch = msg.match(/https?:\/\/[^\s]+/);
-  var detectedUrl = urlMatch ? urlMatch[0] : null;
+  // ── Actions panel
+  var msg=document.getElementById('aiInput').value;
+  var urlMatch=msg.match(/https?:\/\/[^\s]+/);
+  var detectedUrl=urlMatch?urlMatch[0]:null;
+  var types=r.types||[];
+  var actionsHtml='';
 
-  var actionsHtml = '';
-
-  // Warning box for high risk
-  if(r.score >= 45){
-    actionsHtml += '<div style="background:rgba(255,60,90,0.1);border:1px solid rgba(255,60,90,0.35);border-radius:8px;padding:13px 16px;margin-bottom:12px;">'
-      +'<div style="font-size:0.78rem;font-weight:700;color:var(--red);margin-bottom:6px;">'+t('warn-dont-act')+'</div>'
-      +'<div style="font-size:0.72rem;color:var(--text);line-height:1.7;">'
-      +'• '+t('warn-no-link')+'<br>'
-      +'• '+t('warn-no-otp')+'<br>'
-      +'• '+t('warn-no-transfer')+'<br>'
-      +'• '+t('warn-call-direct')
-      +'</div></div>';
+  // Warning box
+  if(r.score>=45){
+    actionsHtml+='<div class="warn-box">'+
+      '<div class="warn-title">⛔ '+t('warn-dont-act')+'</div>'+
+      '<div class="warn-list">'+
+        '• '+t('warn-no-link')+'<br>'+
+        '• '+t('warn-no-otp')+'<br>'+
+        '• '+t('warn-no-transfer')+'<br>'+
+        '• '+t('warn-call-direct')+
+      '</div></div>';
   }
 
-  // URL scanner button
+  // URL scanner
   if(detectedUrl){
-    var vtUrl = 'https://www.virustotal.com/gui/url/'+encodeURIComponent(detectedUrl);
-    actionsHtml += '<div style="margin-bottom:10px;">'
-      +'<div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:7px;font-family:monospace;">'+t('url-check-lbl')+'</div>'
-      +'<div style="background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:0.7rem;font-family:monospace;color:var(--muted2);word-break:break-all;margin-bottom:7px;">'+detectedUrl+'</div>'
-      +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +'<a href="'+vtUrl+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#1a6b3c,#0d4a2a);color:#00ff88;border:1px solid rgba(0,255,136,0.3);border-radius:6px;padding:7px 14px;font-size:0.72rem;font-weight:700;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.boxShadow=\'0 4px 14px rgba(0,255,136,0.3)\'" onmouseout="this.style.boxShadow=\'none\'">'
-      +'<span>🔬</span> '+t('vt-scan-btn')+'</a>'
-      +'<button data-url="'+detectedUrl.replace(/"/g,'&quot;')+'" onclick="copyToClip(this.getAttribute(\'data-url\'))" style="display:inline-flex;align-items:center;gap:6px;background:var(--panel);color:var(--muted2);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:0.72rem;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.color=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted2)\'">'
-      +'<span>📋</span> '+t('copy-url-btn')+'</button>'
-      +'</div></div>';
+    var vtUrl='https://www.virustotal.com/gui/url/'+encodeURIComponent(detectedUrl);
+    actionsHtml+='<div class="url-check-box">'+
+      '<div class="url-check-lbl">'+t('url-check-lbl')+'</div>'+
+      '<div class="url-display">'+detectedUrl+'</div>'+
+      '<div class="url-btns">'+
+        '<a href="'+vtUrl+'" target="_blank" class="btn-vt"><span>🔬</span> '+t('vt-scan-btn')+'</a>'+
+        '<button class="btn-copy-url" data-url="'+detectedUrl.replace(/"/g,'&quot;')+'" onclick="copyToClip(this.getAttribute(\'data-url\'))">📋 '+t('copy-url-btn')+'</button>'+
+      '</div></div>';
   }
 
-  // Kuwait emergency contacts by detected threat type
-  var emergencyNums = '';
-  var types = r.types || [];
-  var eRow = function(icon,name,num,last){
-    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;'+(last?'':' border-bottom:1px solid var(--border);')+'"><span style="font-size:16px">'+icon+'</span><div><div style="font-size:0.72rem;font-weight:600;color:#fff">'+name+'</div><div style="font-size:0.68rem;color:var(--accent);font-family:monospace">'+num+'</div></div></div>';
-  };
-  if(types.indexOf('civil_id')>=0 || types.indexOf('iqama')>=0 || types.indexOf('gov_fake')>=0){
-    emergencyNums += eRow('🏛️', t('moi-paci'), '1889 | 25326400');
-  }
-  if(types.indexOf('knet')>=0){
-    emergencyNums += eRow('💳','KNET','1800 | 22281234');
-  }
-  if(types.indexOf('nbk')>=0){
-    emergencyNums += eRow('🏦', t('nbk-name'), '1801801');
-  }
-  if(types.indexOf('kfh')>=0){
-    emergencyNums += eRow('🏦', t('kfh-name'), '1803333');
-  }
-  if(types.indexOf('bank')>=0){
-    emergencyNums += eRow('🏦', t('cbk-name'), '22164600');
-  }
-  if(types.indexOf('telecom')>=0){
-    emergencyNums += eRow('📱', t('telecom-name'), t('telecom-nums'));
-  }
-  if(types.indexOf('fake_delivery')>=0){
-    emergencyNums += eRow('📦', t('aramex-name'), 'aramex.com | 22274747');
-  }
-  if(types.indexOf('fake_loan')>=0){
-    emergencyNums += eRow('🏦', t('cbk-license'), '22164600');
-  }
-  // Always show cybercrime unit
-  emergencyNums += eRow('🚨', t('cybercrime-name'), t('cybercrime-num'), true);
-
-  if(r.score >= 20){
-    actionsHtml += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;">'
-      +'<div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted2);margin-bottom:9px;font-family:monospace;">'+t('call-official-lbl')+'</div>'
-      +emergencyNums
-      +'</div>';
+  // Emergency contacts
+  if(r.score>=20){
+    var eRow=function(icon,name,num){
+      return '<div class="contact-row">'+
+        '<span class="contact-icon">'+icon+'</span>'+
+        '<div><div class="contact-name">'+name+'</div><div class="contact-num">'+num+'</div></div>'+
+        '</div>';
+    };
+    var rows='';
+    if(types.indexOf('civil_id')>=0||types.indexOf('iqama')>=0||types.indexOf('gov_fake')>=0) rows+=eRow('🏛️',t('moi-paci'),'1889 | 25326400');
+    if(types.indexOf('knet')>=0) rows+=eRow('💳','KNET','1800 | 22281234');
+    if(types.indexOf('nbk')>=0) rows+=eRow('🏦',t('nbk-name'),'1801801');
+    if(types.indexOf('kfh')>=0) rows+=eRow('🏦',t('kfh-name'),'1803333');
+    if(types.indexOf('bank')>=0) rows+=eRow('🏦',t('cbk-name'),'22164600');
+    if(types.indexOf('telecom')>=0) rows+=eRow('📱',t('telecom-name'),t('telecom-nums'));
+    if(types.indexOf('fake_delivery')>=0) rows+=eRow('📦',t('aramex-name'),'aramex.com | 22274747');
+    if(types.indexOf('fake_loan')>=0) rows+=eRow('🏦',t('cbk-license'),'22164600');
+    rows+=eRow('🚨',t('cybercrime-name'),t('cybercrime-num'));
+    actionsHtml+='<div class="contacts-box">'+
+      '<div class="contacts-hdr">'+t('call-official-lbl')+'</div>'+
+      rows+'</div>';
   }
 
-  document.getElementById('aiActions').innerHTML = actionsHtml;
+  document.getElementById('aiActions').innerHTML=actionsHtml;
   res.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -1830,11 +1843,22 @@ function loadScenario(){
   var bestStored=parseInt(localStorage.getItem('shieldkw_best_score')||'0',10);
   var bestEl=document.getElementById('simBest');
   if(bestEl && bestStored>0) bestEl.textContent=t('best-score')+' '+bestStored+'/'+SIM_COUNT;
-  document.getElementById('simFrom').textContent=t('sim-from')+rt(s.from);
+  var fromTxt=rt(s.from);
+  document.getElementById('simFrom').textContent=t('sim-from')+fromTxt;
   var subj=rt(s.subject);
   document.getElementById('simSubject').textContent=subj||t('sim-no-subject');
   document.getElementById('simBody').innerHTML=rt(s.body).replace(/\n/g,'<br>');
   document.getElementById('simQuestion').textContent=rt(s.q);
+  // Auto-detect message channel icon
+  var iconEl=document.getElementById('simMsgIcon');
+  if(iconEl){
+    var fl=fromTxt.toLowerCase();
+    if(/واتساب|whatsapp/.test(fl)) iconEl.textContent='💬';
+    else if(/تيليغرام|telegram/.test(fl)) iconEl.textContent='✈️';
+    else if(/إيميل|email/.test(fl)) iconEl.textContent='📧';
+    else if(/مكالمة|call/.test(fl)) iconEl.textContent='📞';
+    else iconEl.textContent='📱';
+  }
   var opts='';
   s.opts.forEach(function(o,i){
     opts+='<button class="sim-opt" onclick="answerSim('+i+')">'+rt(o)+'</button>';
@@ -1866,8 +1890,13 @@ function answerSim(idx){
   if(strkEl) strkEl.textContent=simStreak>=2?'🔥 '+simStreak:'';
 
   var fb=document.getElementById('simFeedback');
-  fb.innerHTML=rt(s.feedback);
-  fb.className='sim-feedback show';
+  var isCorrect=(idx===s.correct);
+  var prefix=isCorrect
+    ?'<b style="color:#00ff88">✅ '+(LANG==='ar'?'صح!':'Correct!')+'</b> '
+    :'<b style="color:#ff3c5a">❌ '+(LANG==='ar'?'خطأ!':'Wrong!')+'</b> ';
+  var feedbackText=rt(s.feedback).replace(/^[^A-Za-z\u0600-\u06FF]*(?:Correct!|Wrong!|صح!|خطأ!)\s*/i,'');
+  fb.innerHTML=prefix+feedbackText;
+  fb.className='sim-feedback show '+(isCorrect?'fb-correct':'fb-wrong');
   var nextBtn=document.getElementById('simNext');
   nextBtn.className='sim-next show';
   nextBtn.textContent=t('sim-next');
@@ -1907,115 +1936,152 @@ function restartSim(){simIdx=0;simScore=0;simStreak=0;var strkEl=document.getEle
 // KNOWLEDGE BASE
 // ══════════════════════════════════════════
 var KB_ITEMS=[
-  {icon:'🏛️',color:'#3b82f6',source:'NIST',
+  {icon:'🏛️',color:'#3b82f6',source:'NIST',cat:'security',
    title:{en:'NIST Cybersecurity Framework (CSF)',ar:'إطار NIST للأمن السيبراني'},
    body:{en:'The NIST Cybersecurity Framework — the global standard for managing security risks in organizations.',ar:'إطار NIST للأمن السيبراني — الأساس العالمي لإدارة مخاطر الأمن في المنظمات.'},
    tags:['Framework','Risk Management','NIST'],
    detail:{en:'The framework operates on 5 core functions: (1) Identify — know your assets and risks. (2) Protect — apply necessary safeguards. (3) Detect — monitor and search for incidents. (4) Respond — act when an incident is detected. (5) Recover — restore services. ShieldKW applies this framework at the Kuwait community level.',ar:'الإطار يعمل على 5 وظائف رئيسية: (1) Identify — اعرف أصولك ومخاطرك. (2) Protect — طبّق الحمايات اللازمة. (3) Detect — راقب وابحث عن الحوادث. (4) Respond — تصرّف عند اكتشاف حادث. (5) Recover — استعد وأعد الخدمات. ShieldKW يطبّق هذا الإطار على مستوى المجتمع الكويتي.'},
    link:'https://www.nist.gov/cyberframework'},
-  {icon:'🔐',color:'#ef4444',source:'OWASP',
+  {icon:'🔐',color:'#ef4444',source:'OWASP',cat:'security',
    title:{en:'OWASP Top 10 Web Vulnerabilities',ar:'Top 10 أخطر ثغرات تطبيقات الويب'},
    body:{en:'OWASP publishes the top 10 most critical web application vulnerabilities — essential for any developer or security professional.',ar:'OWASP يصدر قائمة بأخطر 10 ثغرات في تطبيقات الويب — أساس لأي مطوّر أو مختص أمن.'},
    tags:['Web Security','Vulnerabilities','Developers'],
    detail:{en:'Top 3 current vulnerabilities: (1) Broken Access Control — apps not properly restricting user permissions. (2) Cryptographic Failures — sensitive data exposed due to weak encryption. (3) Injection — SQL/Command Injection attacks. For Kuwaiti developers: check your projects for these vulnerabilities before launch.',ar:'أخطر 3 ثغرات حالياً: (1) Broken Access Control — تطبيقات لا تحدّ صلاحيات المستخدمين بشكل صحيح. (2) Cryptographic Failures — بيانات حساسة مكشوفة بسبب تشفير ضعيف. (3) Injection — هجمات SQL/Command Injection. للمطورين الكويتيين: تحققوا من هذه الثغرات في مشاريعكم قبل الإطلاق.'},
    link:'https://owasp.org/www-project-top-ten/'},
-  {icon:'🇰🇼',color:'#009900',source:'CITRA',
+  {icon:'🇰🇼',color:'#009900',source:'CITRA',cat:'kuwait',
    title:{en:'Kuwait Cybercrime Law',ar:'قانون جرائم المعلوماتية الكويتي'},
    body:{en:'Law No. 63 of 2015 on combating IT crimes — the legal framework protecting Kuwaitis.',ar:'قانون رقم 63 لسنة 2015 بشأن مكافحة جرائم تقنية المعلومات — الإطار القانوني لحماية الكويتيين.'},
    tags:['Kuwait Law','Legal','CITRA'],
    detail:{en:'Key articles: Article 3 — Unauthorized access (3 years prison + fine). Article 12 — Electronic fraud (3 years + 3000 KWD fine). Article 14 — Digital identity theft. Article 17 — Distributing harmful content. To report cybercrime: CITRA at 165, or Cybercrime Unit at 1872.',ar:'أبرز المواد: المادة 3 — الدخول غير المصرح به (سجن 3 سنوات + غرامة). المادة 12 — الاحتيال الإلكتروني (سجن 3 سنوات + غرامة 3000 دينار). المادة 14 — سرقة الهوية الرقمية. المادة 17 — نشر المحتوى الضار. للإبلاغ عن جريمة إلكترونية: CITRA على 165، أو وحدة الجرائم المعلوماتية 1872.'},
    link:'https://www.citra.gov.kw'},
-  {icon:'💳',color:'#f59e0b',source:'CBK',
+  {icon:'💳',color:'#f59e0b',source:'CBK',cat:'banking',
    title:{en:'KNET & Kuwait Bank Security',ar:'أمان KNET والبنوك الكويتية'},
    body:{en:'Central Bank of Kuwait guidelines for protection against electronic banking fraud.',ar:'إرشادات البنك المركزي الكويتي للحماية من الاحتيال البنكي الإلكتروني.'},
    tags:['Banking','KNET','CBK'],
    detail:{en:'Golden rules: (1) Never share OTP or PIN — even with bank staff. (2) KNET never sends payment links via SMS. (3) Check HTTPS and official bank domain before entering data. (4) Enable SMS alerts for every transaction. (5) If you lose your card, call immediately to block it. Emergency: NBK 1801801, KFH 1803333, CBK 22164600.',ar:'القواعد الذهبية: (1) لا تشارك OTP أو PIN — حتى مع موظف البنك. (2) KNET لا يرسل روابط دفع عبر SMS. (3) تحقق من HTTPS ونطاق البنك الرسمي قبل إدخال بياناتك. (4) فعّل إشعارات SMS لكل معاملة. (5) إذا فقدت بطاقتك اتصل فوراً لإيقافها. أرقام الطوارئ: NBK 1801801، KFH 1803333، CBK 22164600.'},
    link:'https://www.cbk.gov.kw'},
-  {icon:'🦠',color:'#ec4899',source:'VirusTotal',
+  {icon:'🦠',color:'#ec4899',source:'VirusTotal',cat:'tools',
    title:{en:'Scan Suspicious Links & Files',ar:'فحص الروابط والملفات المشبوهة'},
    body:{en:'VirusTotal scans any link or file with 70+ security engines in seconds — an indispensable tool.',ar:'VirusTotal يفحص أي رابط أو ملف بأكثر من 70 محرك أمني في ثوانٍ — أداة لا غنى عنها.'},
    tags:['Tools','URL Scanner','Malware'],
    detail:{en:'How to use it: (1) Go to virustotal.com. (2) Paste the suspicious link or upload the file. (3) Wait for results — if 3+ engines flag danger, the file is highly suspicious. Checks against Kaspersky, BitDefender, ESET, and more. ShieldKW opens VirusTotal directly from analysis results.',ar:'كيف تستخدمه: (1) اذهب إلى virustotal.com. (2) الصق الرابط المشبوه أو ارفع الملف. (3) انتظر النتيجة — إذا أشار 3 محركات أو أكثر للخطر فالملف مشبوه جداً. يفحص ضد قواعد بيانات Kaspersky وBitDefender وESET وغيرهم.'},
    link:'https://www.virustotal.com'},
-  {icon:'📱',color:'#8b5cf6',source:'WhatsApp',
+  {icon:'📱',color:'#8b5cf6',source:'WhatsApp',cat:'privacy',
    title:{en:'Protect Your WhatsApp Account',ar:'حماية حسابك على واتساب'},
    body:{en:'WhatsApp is the most-used channel for scams in Kuwait — here is how to protect your account.',ar:'واتساب هو القناة الأكثر استخداماً في الاحتيال بالكويت — إليك كيف تحمي حسابك.'},
    tags:['WhatsApp','Social Media','Security'],
    detail:{en:'Protection steps: (1) Enable two-step verification in settings. (2) Never send the 6-digit activation code to anyone. (3) If your account is stolen: reinstall WhatsApp and enter your number to recover it. (4) Do not click links from unknown numbers. (5) Review privacy settings: who can see your photo, status, and info.',ar:'خطوات الحماية: (1) فعّل التحقق بخطوتين من الإعدادات. (2) لا ترسل رمز التفعيل المكون من 6 أرقام لأحد أبداً. (3) إذا سُرق حسابك: ثبّت واتساب مجدداً على هاتفك وأدخل رقمك لاسترجاعه. (4) لا تضغط روابط من أرقام مجهولة. (5) تحقق من الخصوصية: من يرى صورتك وحالتك ومعلوماتك.'},
    link:'https://www.whatsapp.com/security'},
-  {icon:'🔑',color:'#06b6d4',source:'NIST',
+  {icon:'🔑',color:'#06b6d4',source:'NIST',cat:'security',
    title:{en:'Strong Passwords & 2FA',ar:'كلمات المرور القوية والـ 2FA'},
    body:{en:'95% of breaches start with a weak or stolen password — here is how to protect yourself.',ar:'95% من عمليات الاختراق تبدأ بكلمة مرور ضعيفة أو مسروقة — إليك كيف تحمي نفسك.'},
    tags:['Passwords','2FA','Account Security'],
    detail:{en:'Strong password rules: (1) At least 12 characters — numbers, letters, and symbols. (2) Do not use your name, birthday, or children\'s names. (3) Different password for each account. (4) Use a Password Manager like Bitwarden or 1Password. (5) Enable two-factor authentication (2FA) on all important accounts — email, banking, and social media.',ar:'قواعد كلمة المرور القوية: (1) 12 حرفاً على الأقل — أرقام وحروف ورموز. (2) لا تستخدم اسمك أو تاريخ ميلادك أو اسم أبنائك. (3) كلمة مرور مختلفة لكل حساب. (4) استخدم Password Manager مثل Bitwarden أو 1Password. (5) فعّل المصادقة الثنائية (2FA) على كل حساباتك المهمة — البريد والبنك والسوشيال ميديا.'},
    link:'https://csrc.nist.gov/publications/sp'},
-  {icon:'🛡️',color:'#10b981',source:'SANS',
+  {icon:'🛡️',color:'#10b981',source:'SANS',cat:'kuwait',
    title:{en:'Common Scam Types in Kuwait',ar:'أنواع الاحتيال الشائعة بالكويت'},
    body:{en:'A comprehensive guide to the most widespread electronic scam types in Kuwait and how each works.',ar:'دليل شامل لأنواع الاحتيال الإلكتروني الأكثر انتشاراً في الكويت وطريقة كل نوع.'},
    tags:['Kuwait','Scam Types','Awareness'],
    detail:{en:'Top 6 types: (1) Relative Scam — impersonating a relative in trouble. (2) Civil ID Scam — fake renewal link. (3) OTP Theft — call "from the bank". (4) Fake Investment — guaranteed false returns. (5) Fake Prize — congratulations you won! (6) Job Scam — fake registration fees. All rely on urgency and creating a sense of danger or reward.',ar:'أشهر 6 أنواع: (1) نصب القريب — انتحال شخصية قريب في ورطة. (2) احتيال البطاقة المدنية — رابط تجديد مزيف. (3) سرقة OTP — مكالمة "من البنك". (4) الاستثمار الوهمي — عوائد مضمونة كاذبة. (5) الجائزة الوهمية — مبروك فزت! (6) نصب الوظيفة — رسوم تسجيل وهمية. كلها تعتمد على الاستعجال وإيهامك بالخطر أو المكسب.'},
    link:'https://www.sans.org'},
-  {icon:'🌐',color:'#f97316',source:'PACI',
+  {icon:'🌐',color:'#f97316',source:'PACI',cat:'kuwait',
    title:{en:'Official Kuwait Government Services',ar:'الخدمات الحكومية الكويتية الرسمية'},
    body:{en:'List of official government websites and apps — verify before any transaction.',ar:'قائمة بالمواقع والتطبيقات الحكومية الرسمية — تحقق منها قبل أي معاملة.'},
    tags:['Kuwait Gov','Official Sites','PACI'],
    detail:{en:'Official approved sites only: MOI: moi.gov.kw | PACI (Residency): paci.gov.kw | MOF: mof.gov.kw | MOH: moh.gov.kw | CITRA: citra.gov.kw | Government Portal: e.gov.kw | Sahel App: sahel.com.kw. Any site not ending in .gov.kw or not on this list — do not enter your data.',ar:'المواقع الرسمية المعتمدة فقط: وزارة الداخلية: moi.gov.kw | PACI (الإقامة): paci.gov.kw | وزارة المالية: mof.gov.kw | وزارة الصحة: moh.gov.kw | CITRA: citra.gov.kw | بوابة الحكومة: e.gov.kw | تطبيق ساهل: sahel.com.kw. أي موقع لا ينتهي بـ .gov.kw أو لا يمت لهذه القائمة بصلة — لا تدخل بياناتك فيه.'},
    link:'https://e.gov.kw'},
-  {icon:'🔍',color:'#a855f7',source:'Cybersecurity',
+  {icon:'🔍',color:'#a855f7',source:'Cybersecurity',cat:'security',
    title:{en:'How to Verify a Suspicious Message',ar:'كيف تتحقق من أي رسالة مشبوهة'},
    body:{en:'5 practical steps to follow before replying to or clicking a link in an unknown message.',ar:'5 خطوات عملية تتبعها قبل أي رد أو ضغط على رابط في رسالة مجهولة.'},
    tags:['Practical Tips','Verification','Tips'],
    detail:{en:'Steps: (1) The link — does it end with the official domain? (2) The sender — is the number or email logical? (3) Urgency — does the message pressure you to act immediately? (4) Requested data — does it ask for OTP, password, or card details? (5) Independent verification — call the entity on their official number that you know, not the number in the message.',ar:'الخطوات: (1) الرابط — هل ينتهي بالنطاق الرسمي؟ (2) المُرسل — هل الرقم أو الإيميل منطقي؟ (3) الاستعجال — هل الرسالة تضغط عليك للتصرف فوراً؟ (4) البيانات المطلوبة — هل تطلب OTP أو كلمة مرور أو بطاقتك؟ (5) التحقق المستقل — اتصل بالجهة على رقمها الرسمي الذي تعرفه أنت، لا الرقم الوارد في الرسالة.'},
    link:'https://www.cisa.gov/topics/cybersecurity-best-practices'},
-  {icon:'👨‍👩‍👦',color:'#e11d48',source:'Family Safety',
+  {icon:'👨‍👩‍👦',color:'#e11d48',source:'Family Safety',cat:'family',
    title:{en:'Protecting Elderly from Scams',ar:'حماية كبار السن من الاحتيال'},
    body:{en:'Elderly people are the most targeted in Kuwait — here is how to protect your parents and elders.',ar:'كبار السن هم الأكثر استهدافاً في الكويت — إليك كيف تحمي والديك وكبار العيلة.'},
    tags:['Family','Elderly','Awareness'],
    detail:{en:'Practical tips: (1) Teach them the golden rule: do not transfer money to anyone without calling me first. (2) Add your number as an emergency contact on their phone. (3) Explain that banks never ask for OTP. (4) If they receive a suspicious message, screenshot it, delete it, and do not respond. (5) Enable transaction alerts on their phone.',ar:'نصائح عملية: (1) علّمهم القاعدة الذهبية: لا تحوّل فلوس لأحد بدون ما تكلمني أولاً. (2) أضف رقمك كجهة اتصال طوارئ في هاتفهم. (3) اشرح لهم أن البنوك لا تطلب OTP أبداً. (4) إذا وصلتهم رسالة مشبوهة، خذ لقطة شاشة واحذفها ولا تتفاعل معها. (5) فعّل تنبيهات المعاملات البنكية على هاتفهم.'},
    link:'https://www.cisa.gov/audiences/individuals-and-families'},
-  {icon:'🚨',color:'#dc2626',source:'Emergency',
+  {icon:'🚨',color:'#dc2626',source:'Emergency',cat:'kuwait',
    title:{en:'What to Do If You Are a Scam Victim',ar:'ماذا تفعل إذا وقعت ضحية احتيال؟'},
    body:{en:'If you fell victim to electronic fraud — immediate steps to take in Kuwait.',ar:'إذا تعرضت للاحتيال الإلكتروني — الخطوات الفورية التي يجب اتخاذها في الكويت.'},
    tags:['Emergency','Response','Victim Help'],
    detail:{en:'Immediate steps: (1) Call your bank immediately to stop transactions — NBK 1801801, KFH 1803333. (2) Change your passwords from another secure device. (3) Report to Cybercrime Unit: 1872. (4) Keep all evidence — screenshots, phone numbers, links. (5) Report to CITRA at 165. (6) If financial crime, file a report at the nearest police station with all evidence.',ar:'الخطوات الفورية: (1) اتصل ببنكك فوراً لإيقاف أي معاملات — NBK 1801801، KFH 1803333. (2) غيّر كلمات مرورك من جهاز آخر آمن. (3) أبلغ وحدة الجرائم المعلوماتية: 1872. (4) احتفظ بكل الأدلة — لقطات شاشة، أرقام هواتف، روابط. (5) أبلغ CITRA على 165. (6) إذا كانت جريمة مالية، قدّم بلاغاً في أقرب مركز شرطة مع كل الأدلة.'},
    link:'https://www.citra.gov.kw'},
   // ── New KB articles
-  {icon:'📱',color:'#0ea5e9',source:'Mobile Security',
+  {icon:'📱',color:'#0ea5e9',source:'Mobile Security',cat:'security',
    title:{en:'Mobile Device Security',ar:'أمان الأجهزة المحمولة'},
    body:{en:'Your phone holds your entire digital life — here is how to keep it secure.',ar:'هاتفك يحتوي على حياتك الرقمية بالكامل — إليك كيف تحميه.'},
    tags:['Mobile','Android','iOS','Security'],
    detail:{en:'Essential mobile security steps: (1) Keep your OS and apps updated — updates patch security vulnerabilities. (2) Only install apps from official stores (App Store / Google Play). (3) Review app permissions — a flashlight app should not need access to your contacts. (4) Enable screen lock with biometrics (fingerprint/face) + PIN. (5) Enable Find My Device (iPhone: Find My, Android: Find My Device) to locate or wipe your phone if lost. (6) Never connect to unknown public WiFi without a trusted VPN. (7) Disable Bluetooth and AirDrop when not in use.',ar:'خطوات أمان الجوال الأساسية: (1) حدّث نظامك وتطبيقاتك دائماً — التحديثات تسدّ ثغرات أمنية. (2) حمّل التطبيقات من المتاجر الرسمية فقط (App Store / Google Play). (3) راجع صلاحيات التطبيقات — تطبيق الكشاف ما يحتاج يوصل لجهات اتصالك. (4) فعّل قفل الشاشة ببصمة الإصبع أو الوجه + رقم سري. (5) فعّل Find My Device لتتبع أو مسح هاتفك إذا ضاع. (6) لا تتصل بشبكات WiFi عامة مجهولة بدون VPN موثوق. (7) أغلق البلوتوث وAirDrop لما ما تستخدمهم.'},
    link:'https://www.cisa.gov/topics/cybersecurity-best-practices'},
-  {icon:'🛒',color:'#22c55e',source:'E-Commerce',
+  {icon:'🛒',color:'#22c55e',source:'E-Commerce',cat:'kuwait',
    title:{en:'Safe Online Shopping in Kuwait',ar:'التسوق الإلكتروني الآمن في الكويت'},
    body:{en:'Online shopping is booming in Kuwait — protect yourself from fake stores and payment fraud.',ar:'التسوق الإلكتروني منتشر بالكويت — احمِ نفسك من المتاجر الوهمية والاحتيال.'},
    tags:['E-Commerce','Shopping','KNET','Safety'],
    detail:{en:'Safe shopping rules: (1) Only shop on well-known sites (Amazon, Noon, Xcite, Best Al Yousifi, Blink) or verified Instagram sellers. (2) Check for HTTPS and padlock icon before entering card data. (3) Use virtual cards or prepaid cards for online purchases. (4) Never enter card data on a site you reached via an SMS link. (5) Enable transaction alerts so you know instantly when your card is charged. (6) If a deal seems too good to be true, it probably is. (7) For Instagram/social media sellers, check reviews and ask for COD (cash on delivery) option.',ar:'قواعد التسوق الآمن: (1) اشترِ من مواقع معروفة فقط (Amazon, Noon, Xcite, Best Al Yousifi, Blink) أو بائعين موثقين في إنستغرام. (2) تأكد من وجود HTTPS وأيقونة القفل قبل إدخال بيانات البطاقة. (3) استخدم بطاقات افتراضية أو مسبقة الدفع للشراء أونلاين. (4) لا تدخل بيانات البطاقة في موقع وصلته عبر رابط SMS. (5) فعّل تنبيهات المعاملات لتعرف فوراً لما يتم خصم مبلغ. (6) إذا العرض أحسن من الطبيعي، على الأرجح احتيال. (7) لبائعي إنستغرام، تحقق من التقييمات واطلب الدفع عند الاستلام.'},
    link:'https://consumer.ftc.gov/shopping-and-donating/online-shopping'},
-  {icon:'📸',color:'#e879f9',source:'Privacy',
+  {icon:'📸',color:'#e879f9',source:'Privacy',cat:'privacy',
    title:{en:'Social Media Privacy Guide',ar:'دليل خصوصية السوشيال ميديا'},
    body:{en:'Your social media profiles reveal more than you think — here is how to protect your privacy.',ar:'حساباتك في السوشيال ميديا تكشف أكثر مما تتوقع — إليك كيف تحمي خصوصيتك.'},
    tags:['Privacy','Instagram','Snapchat','TikTok'],
    detail:{en:'Privacy steps: (1) Set your Instagram and Snapchat to private — scammers mine public profiles for personal data. (2) Never post photos of your civil ID, passport, car plate, or home address. (3) Disable location tags on posts — they reveal where you live and travel. (4) Be cautious with quizzes and games that ask for personal info ("your first pet name" is often a security question). (5) Review third-party apps connected to your accounts and remove unused ones. (6) Use different email addresses for social media and banking. (7) Enable login alerts to know if someone accesses your account.',ar:'خطوات الخصوصية: (1) اجعل حسابات إنستغرام وسنابشات خاصة — المحتالون يجمعون بيانات من الحسابات العامة. (2) لا تنشر صور البطاقة المدنية أو الجواز أو لوحة السيارة أو عنوان البيت أبداً. (3) ألغِ تحديد الموقع في المنشورات — يكشف وين تسكن وتسافر. (4) احذر من الألعاب والاختبارات التي تطلب معلومات شخصية ("اسم حيوانك الأليف الأول" غالباً سؤال أمان). (5) راجع التطبيقات المرتبطة بحساباتك واحذف اللي ما تستخدمها. (6) استخدم إيميلات مختلفة للسوشيال ميديا وللبنك. (7) فعّل تنبيهات تسجيل الدخول لتعرف إذا أحد دخل حسابك.'},
    link:'https://www.cisa.gov/audiences/individuals-and-families'},
-  {icon:'🏠',color:'#f97316',source:'Network Security',
+  {icon:'🏠',color:'#f97316',source:'Network Security',cat:'security',
    title:{en:'Secure Your Home WiFi',ar:'تأمين شبكة WiFi المنزلية'},
    body:{en:'Your home WiFi is the gateway to all your devices — secure it properly.',ar:'شبكة WiFi البيت هي البوابة لكل أجهزتك — أمّنها بشكل صحيح.'},
    tags:['WiFi','Router','Home Network'],
    detail:{en:'Home WiFi security: (1) Change the default router admin password immediately — many Kuwaiti ISP routers use "admin/admin". (2) Use WPA3 or WPA2 encryption — never leave WiFi open. (3) Change your WiFi name (SSID) to something that does not identify you or your apartment. (4) Create a guest network for visitors — keeps your main network separate. (5) Update your router firmware regularly. (6) Disable WPS (WiFi Protected Setup) — it has known vulnerabilities. (7) Check connected devices regularly for unknown connections.',ar:'أمان WiFi المنزلي: (1) غيّر كلمة مرور الراوتر الافتراضية فوراً — كثير من راوترات مزودي الإنترنت بالكويت تستخدم "admin/admin". (2) استخدم تشفير WPA3 أو WPA2 — لا تترك الشبكة مفتوحة أبداً. (3) غيّر اسم الشبكة (SSID) لاسم ما يدلّ عليك أو على شقتك. (4) أنشئ شبكة ضيوف للزوار — تفصل أجهزتك عن أجهزتهم. (5) حدّث برنامج الراوتر بشكل دوري. (6) أغلق WPS — فيه ثغرات معروفة. (7) تحقق من الأجهزة المتصلة بشبكتك بشكل دوري.'},
    link:'https://www.cisa.gov/topics/cybersecurity-best-practices'},
-  {icon:'💼',color:'#6366f1',source:'Work Security',
+  {icon:'💼',color:'#6366f1',source:'Work Security',cat:'security',
    title:{en:'Cybersecurity at Work',ar:'الأمن السيبراني في بيئة العمل'},
    body:{en:'Workplace cybersecurity habits that protect you and your company.',ar:'عادات الأمن السيبراني التي تحمي موظفيك وشركتك.'},
    tags:['Workplace','Enterprise','Email Security'],
    detail:{en:'Workplace security essentials: (1) Never use personal email for work — and never use work email for personal accounts. (2) Lock your computer when leaving your desk (Win+L or Cmd+L). (3) Do not plug in unknown USB drives — they may contain malware. (4) Verify wire transfer requests via phone — Business Email Compromise (BEC) costs companies millions. (5) Report suspicious emails to IT immediately — do not just delete them. (6) Use company VPN when working remotely. (7) Do not share work credentials with colleagues — even temporarily.',ar:'أساسيات أمان بيئة العمل: (1) لا تستخدم إيميلك الشخصي للعمل — ولا إيميل العمل لحساباتك الشخصية. (2) اقفل الكمبيوتر لما تقوم من مكتبك (Win+L أو Cmd+L). (3) لا تشبك فلاشات USB مجهولة — قد تحتوي على malware. (4) تحقق من طلبات التحويلات المالية عبر الهاتف — احتيال البريد الإلكتروني التجاري (BEC) يكلف الشركات ملايين. (5) أبلغ IT فوراً عن الإيميلات المشبوهة — لا تحذفها فقط. (6) استخدم VPN الشركة عند العمل عن بُعد. (7) لا تشارك بيانات الدخول مع الزملاء — حتى مؤقتاً.'},
    link:'https://www.sans.org/security-awareness-training'},
-  {icon:'🧒',color:'#f43f5e',source:'Child Safety',
+  {icon:'🧒',color:'#f43f5e',source:'Child Safety',cat:'family',
    title:{en:'Protecting Children Online',ar:'حماية الأطفال على الإنترنت'},
    body:{en:'Children in Kuwait are increasingly online — here is how to keep them safe from threats.',ar:'أطفال الكويت يستخدمون الإنترنت أكثر من أي وقت — إليك كيف تحميهم.'},
    tags:['Children','Parental Controls','Online Safety'],
    detail:{en:'Child safety steps: (1) Set up parental controls on all devices — iOS Screen Time, Google Family Link, or router-level filtering. (2) Teach children never to share personal info (name, school, location) with strangers online. (3) Keep devices in shared family areas, not bedrooms. (4) Regularly check their app list and online activity — not to spy, but to protect. (5) Explain that not everyone online is who they say they are. (6) Set age-appropriate content filters on YouTube, TikTok, and gaming platforms. (7) Create an open environment where children feel safe telling you if something uncomfortable happens online.',ar:'خطوات حماية الأطفال: (1) فعّل الرقابة الأبوية على كل الأجهزة — Screen Time للآيفون، Google Family Link للأندرويد، أو فلترة من الراوتر. (2) علّم أطفالك أن لا يشاركوا معلوماتهم الشخصية (الاسم، المدرسة، الموقع) مع غرباء أونلاين. (3) خلّي الأجهزة في الأماكن المشتركة، مو في غرف النوم. (4) راجع تطبيقاتهم ونشاطهم بشكل دوري — مو للتجسس بل للحماية. (5) اشرح لهم أن مو كل شخص أونلاين هو اللي يقول عن نفسه. (6) فعّل فلاتر المحتوى المناسبة للعمر في يوتيوب وتيك توك والألعاب. (7) اخلق بيئة مفتوحة يحسّون فيها بالأمان ليقولون لك إذا صار شيء مزعج أونلاين.'},
-   link:'https://www.cisa.gov/audiences/individuals-and-families'}
+   link:'https://www.cisa.gov/audiences/individuals-and-families'},
+  // ── Real-link resources
+  {icon:'🔓',color:'#ef4444',source:'Have I Been Pwned',cat:'tools',
+   title:{en:'Check If Your Data Was Leaked',ar:'هل تسرّبت بياناتك؟'},
+   body:{en:'Have I Been Pwned lets you check if your email or phone number appeared in any known data breach — completely free.',ar:'Have I Been Pwned يتيح لك التحقق إذا ظهر إيميلك أو رقمك في أي تسريب بيانات معروف — مجاناً تماماً.'},
+   tags:['Data Breach','Email','Passwords','Free Tool'],
+   detail:{en:'How to use: (1) Go to haveibeenpwned.com. (2) Enter your email address. (3) If breached, you will see which services leaked your data and when. (4) Also check "Passwords" tab — enter a password to see if it was leaked. (5) Enable notifications to be alerted if your email appears in future breaches. (6) If breached: change the password on that service immediately, and on any other account using the same password.',ar:'طريقة الاستخدام: (1) اذهب إلى haveibeenpwned.com. (2) أدخل إيميلك. (3) إذا تسرّبت بياناتك، ستشوف أي خدمات سرّبتها ومتى. (4) تحقق أيضاً من تبويب "Passwords" — أدخل كلمة مرور لترى إذا تسرّبت. (5) فعّل الإشعارات لتُنبَّه إذا ظهر إيميلك في تسريبات مستقبلية. (6) إذا تسرّبت بياناتك: غيّر كلمة المرور في تلك الخدمة فوراً، وفي أي حساب آخر يستخدم نفس الكلمة.'},
+   link:'https://haveibeenpwned.com'},
+  {icon:'🗝️',color:'#06b6d4',source:'Bitwarden',cat:'tools',
+   title:{en:'Bitwarden: Free Password Manager',ar:'Bitwarden: مدير كلمات مرور مجاني'},
+   body:{en:'Bitwarden is a free, open-source, and trusted password manager that securely stores all your passwords — the gold standard for individuals.',ar:'Bitwarden هو مدير كلمات مرور مجاني ومفتوح المصدر وموثوق — يخزّن كل كلمات مرورك بأمان.'},
+   tags:['Passwords','Password Manager','Free','Open Source'],
+   detail:{en:'Why Bitwarden: (1) Completely free for personal use — no hidden fees. (2) Open source — the code is publicly audited. (3) Works on iPhone, Android, Windows, Mac, and all browsers. (4) Generates strong random passwords for every site. (5) Auto-fills passwords so you never have to remember them. (6) End-to-end encrypted — even Bitwarden staff cannot see your passwords. (7) Syncs across all your devices automatically. Start: download from bitwarden.com, create one master password (make it very strong), then start importing or saving passwords.',ar:'لماذا Bitwarden: (1) مجاني تماماً للاستخدام الشخصي — بدون رسوم مخفية. (2) مفتوح المصدر — الكود يُراجع علناً. (3) يعمل على آيفون وأندرويد وويندوز وماك وكل المتصفحات. (4) يولّد كلمات مرور عشوائية قوية لكل موقع. (5) يملأ كلمات المرور تلقائياً ما تحتاج تتذكرها. (6) مشفّر من طرف لطرف — حتى موظفو Bitwarden ما يقدرون يشوفون كلماتك. (7) يزامن كل أجهزتك تلقائياً. للبداية: حمّل من bitwarden.com، أنشئ كلمة مرور رئيسية واحدة قوية جداً، ثم ابدأ باستيراد أو حفظ كلمات المرور.'},
+   link:'https://bitwarden.com'},
+  {icon:'✅',color:'#10b981',source:'2FA Directory',cat:'tools',
+   title:{en:'Which Sites Support Two-Factor Auth?',ar:'أي مواقع تدعم المصادقة الثنائية؟'},
+   body:{en:'2FA Directory lists every website that supports two-factor authentication — find out which of your accounts can be made more secure right now.',ar:'2FA Directory يسرد كل موقع يدعم المصادقة الثنائية — اكتشف أي حساباتك تقدر تؤمّنها الآن.'},
+   tags:['2FA','Account Security','MFA','Free Tool'],
+   detail:{en:'How to use: (1) Go to 2fa.directory. (2) Search for any website (Instagram, Snapchat, your bank, etc.). (3) If listed: follow the instructions to enable 2FA — usually under Account Security settings. (4) Best 2FA methods (from safest to least): Security Key (YubiKey) → Authenticator App (Google Authenticator, Authy) → SMS code → Email code. (5) SMS is better than nothing, but authenticator apps are much safer since they work without a phone signal and cannot be SIM-swapped. Priority: enable 2FA on email first — your email is the key to everything else.',ar:'طريقة الاستخدام: (1) اذهب إلى 2fa.directory. (2) ابحث عن أي موقع (إنستغرام، سنابشات، بنكك، إلخ). (3) إذا مدرج: اتبع التعليمات لتفعيل 2FA — عادةً في إعدادات أمان الحساب. (4) أفضل طرق 2FA (من الأأمن للأقل): مفتاح أمان (YubiKey) ← تطبيق مصادقة (Google Authenticator, Authy) ← كود SMS ← كود إيميل. (5) SMS أفضل من لا شيء، لكن تطبيقات المصادقة أأمن بكثير لأنها تعمل بدون إشارة هاتف ولا تتأثر بسرقة الشريحة. الأولوية: فعّل 2FA على إيميلك أولاً — إيميلك هو مفتاح كل شيء آخر.'},
+   link:'https://2fa.directory'},
+  {icon:'🔒',color:'#4285f4',source:'Google',cat:'tools',
+   title:{en:'Google Safety Center & Security Checkup',ar:'مركز أمان Google وفحص الأمان'},
+   body:{en:'Google Safety Center provides free tools to secure your Google account and all connected services — including a full Security Checkup in 5 minutes.',ar:'مركز أمان Google يقدم أدوات مجانية لتأمين حساب Google وكل الخدمات المتصلة — شامل فحص أمان كامل في 5 دقائق.'},
+   tags:['Google','Account Security','Privacy','Free Tool'],
+   detail:{en:'What to do: (1) Go to safety.google and run Security Checkup — it reviews your account for risky access, old passwords, and suspicious activity. (2) Check "Third-party apps with account access" — revoke anything you do not recognize. (3) Review your recovery email and phone number — keep them updated. (4) Enable 2FA on your Google account — this protects Gmail, Drive, YouTube, and all Google services. (5) Check "Recent security activity" for any unfamiliar logins. (6) If you use Android: your Google account controls your entire phone — treat it like your most important account. (7) Also check myaccount.google.com for full privacy and security controls.',ar:'ماذا تفعل: (1) اذهب إلى safety.google وشغّل Security Checkup — يراجع حسابك لأي وصول خطر وكلمات مرور قديمة ونشاط مشبوه. (2) تحقق من "التطبيقات التابعة لجهات خارجية التي تملك صلاحية الوصول إلى حسابك" — ألغِ أي شيء ما تعرفه. (3) راجع إيميل الاسترداد ورقم الهاتف — ابقِها محدّثة. (4) فعّل 2FA على حساب Google — يحمي Gmail وDrive وYouTube وكل خدمات Google. (5) تحقق من "نشاط الأمان الأخير" لأي تسجيلات دخول غير مألوفة. (6) إذا تستخدم Android: حساب Google يتحكم في هاتفك بالكامل — عامله كأهم حساب لديك. (7) تحقق أيضاً من myaccount.google.com للتحكم الكامل في الخصوصية والأمان.'},
+   link:'https://safety.google'},
+  {icon:'📲',color:'#00c851',source:'Sahel App',cat:'kuwait',
+   title:{en:'Sahel: Kuwait\'s Official Government App',ar:'ساهل: التطبيق الحكومي الرسمي الكويتي'},
+   body:{en:'Sahel is Kuwait\'s official unified government services app — complete hundreds of government transactions without visiting any ministry.',ar:'ساهل هو التطبيق الحكومي الكويتي الموحد — أنجز مئات المعاملات الحكومية بدون زيارة أي وزارة.'},
+   tags:['Kuwait','Government','Sahel','Official App'],
+   detail:{en:'What Sahel offers: (1) Civil ID renewal and tracking. (2) Residency transactions for expats (PACI). (3) Traffic violations check and payment. (4) MOH health appointments. (5) Ministry of Finance transactions. (6) Kuwait Municipality services. (7) CITRA telecom complaints. (8) Kuwait customs and ports. Safe use tips: (1) Only download from the official App Store or Google Play — search "ساهل" or "Sahel Kuwait". (2) The official app is by "General Secretariat of the Supreme Council for Planning and Development". (3) Never enter your Civil ID data on any third-party "Sahel helper" app or website. (4) Official website: sahel.com.kw',ar:'ما يتيحه ساهل: (1) تجديد البطاقة المدنية وتتبعها. (2) معاملات الإقامة للوافدين (PACI). (3) استعلام عن المخالفات المرورية وسدادها. (4) مواعيد صحية مع وزارة الصحة. (5) معاملات وزارة المالية. (6) خدمات بلدية الكويت. (7) شكاوى اتصالات CITRA. (8) الجمارك الكويتية والموانئ. نصائح الاستخدام الآمن: (1) حمّله فقط من App Store أو Google Play الرسمي — ابحث عن "ساهل" أو "Sahel Kuwait". (2) التطبيق الرسمي من "الأمانة العامة للمجلس الأعلى للتخطيط والتنمية". (3) لا تدخل بيانات البطاقة المدنية في أي تطبيق أو موقع "مساعد ساهل" غير رسمي. (4) الموقع الرسمي: sahel.com.kw'},
+   link:'https://sahel.com.kw'},
+  {icon:'🛡️',color:'#7c3aed',source:'CISA',cat:'security',
+   title:{en:'Phishing Defense: CISA Official Guide',ar:'دفاع التصيد: دليل CISA الرسمي'},
+   body:{en:'The US Cybersecurity & Infrastructure Security Agency publishes the most comprehensive free guide on recognizing and avoiding phishing attacks.',ar:'وكالة الأمن السيبراني وأمن البنية التحتية الأمريكية تصدر الدليل المجاني الأشمل لكشف هجمات التصيد وتجنّبها.'},
+   tags:['Phishing','CISA','Email Security','Awareness'],
+   detail:{en:'CISA phishing red flags: (1) Urgency language — "Your account will be suspended in 24 hours!". (2) Generic greetings — "Dear Customer" instead of your name. (3) Suspicious links — hover over any link before clicking; the URL should match the real domain. (4) Requests for sensitive data — legitimate companies never ask for passwords via email. (5) Grammar and spelling errors — though AI has made phishing more polished. (6) Unexpected attachments — even from known contacts (their account may be compromised). (7) Mismatched sender domain — "support@nbl-kuwait.com" instead of "support@nbk.com". CISA recommends: report phishing to phishing-report@us-cert.gov and forward SMS scams to 7726 (SPAM).',ar:'علامات تحذير التصيد من CISA: (1) لغة الاستعجال — "حسابك سيُعلّق خلال 24 ساعة!". (2) التحيات العامة — "عزيزي العميل" بدلاً من اسمك. (3) روابط مشبوهة — مرّر فوق أي رابط قبل الضغط؛ العنوان يجب أن يطابق النطاق الحقيقي. (4) طلبات بيانات حساسة — الشركات الشرعية لا تطلب كلمات المرور عبر الإيميل أبداً. (5) أخطاء نحوية وإملائية — رغم أن الذكاء الاصطناعي جعل التصيد أكثر احترافاً. (6) مرفقات غير متوقعة — حتى من جهات معروفة (قد يكون حسابهم مخترقاً). (7) نطاق المُرسل غير المتطابق — "support@nbl-kuwait.com" بدلاً من "support@nbk.com". CISA توصي بـ: أبلّغ عن التصيد على phishing-report@us-cert.gov وأعد توجيه SMS الاحتيالية إلى 7726.'},
+   link:'https://www.cisa.gov/topics/phishing'}
 ];
 
 var kbActiveIdx = 0;
@@ -2075,26 +2141,57 @@ function renderKBModal(i){
   document.getElementById('kbMSrc').textContent = item.source + '  ·  ' + (i+1) + ' / ' + KB_ITEMS.length;
 }
 
+var kbActiveFilter = 'all';
+
+function buildKBFilters(){
+  var wrap = document.getElementById('kbFilters');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  var cats = [
+    {key:'all',     label:{en:'All',      ar:'الكل'}},
+    {key:'kuwait',  label:{en:'Kuwait',   ar:'كويت'}},
+    {key:'tools',   label:{en:'Tools',    ar:'أدوات'}},
+    {key:'security',label:{en:'Security', ar:'أمان'}},
+    {key:'privacy', label:{en:'Privacy',  ar:'خصوصية'}},
+    {key:'banking', label:{en:'Banking',  ar:'بنوك'}},
+    {key:'family',  label:{en:'Family',   ar:'عائلة'}}
+  ];
+  cats.forEach(function(c){
+    var pill = document.createElement('button');
+    pill.className = 'kb-filter-pill' + (kbActiveFilter === c.key ? ' active' : '');
+    pill.textContent = rt(c.label);
+    pill.setAttribute('data-cat', c.key);
+    pill.addEventListener('click', function(){
+      kbActiveFilter = c.key;
+      wrap.querySelectorAll('.kb-filter-pill').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-cat') === c.key);
+      });
+      var searchInput = document.getElementById('kbSearch');
+      filterKB(searchInput ? searchInput.value : '', c.key);
+    });
+    wrap.appendChild(pill);
+  });
+}
+
 function buildKB(){
   var grid = document.getElementById('kbGrid');
-  // Remove old cards but keep the search bar
-  var oldCards = grid.querySelectorAll('.kb-card, .kb-no-results');
-  oldCards.forEach(function(c){ c.remove(); });
+  grid.innerHTML = '';
   var badge = document.getElementById('kbCount');
   if(badge) badge.textContent = KB_ITEMS.length;
+  kbActiveFilter = 'all';
+  buildKBFilters();
   KB_ITEMS.forEach(function(item, i){
     var card = document.createElement('div');
     card.className = 'kb-card';
+    card.setAttribute('data-cat', item.cat || 'security');
     card.innerHTML =
+      '<div class="kb-card-accent" style="background:'+item.color+'"></div>'+
       '<div class="kb-card-top">'+
         '<div class="kb-icon" style="background:'+item.color+'20;border:1px solid '+item.color+'35">'+item.icon+'</div>'+
-        '<div style="flex:1;min-width:0;">'+
-          '<div class="kb-source">'+item.source+'</div>'+
+        '<div class="kb-card-meta">'+
+          '<span class="kb-source-pill" style="background:'+item.color+'20;color:'+item.color+';border:1px solid '+item.color+'40">'+item.source+'</span>'+
           '<div class="kb-title">'+rt(item.title)+'</div>'+
         '</div>'+
-        '<span style="font-size:0.65rem;color:var(--muted2);flex-shrink:0;font-family:monospace;">'+
-          (i+1)+'/'+KB_ITEMS.length+
-        '</span>'+
       '</div>'+
       '<div class="kb-body-wrap">'+
         '<div class="kb-summary">'+rt(item.body)+'</div>'+
@@ -2106,11 +2203,9 @@ function buildKB(){
         '<button class="kb-read-btn">'+t('kb-read')+'</button>'+
         '<a href="'+item.link+'" target="_blank" class="kb-ext-link" onclick="event.stopPropagation()">'+item.source+' ↗</a>'+
       '</div>';
-    // click on card or read btn → open modal
     var btn = card.querySelector('.kb-read-btn');
     btn.addEventListener('click', function(e){ e.stopPropagation(); openKB(i); });
     card.addEventListener('click', function(){ openKB(i); });
-    // hover accent border
     card.addEventListener('mouseenter', function(){ card.style.borderColor = item.color+'80'; });
     card.addEventListener('mouseleave', function(){ card.style.borderColor = ''; });
     grid.appendChild(card);
@@ -2158,8 +2253,9 @@ document.addEventListener('keydown', function(e){
 // ══════════════════════════════════════════
 // KB SEARCH / FILTER
 // ══════════════════════════════════════════
-function filterKB(query){
+function filterKB(query, cat){
   var q = query.toLowerCase().trim();
+  var activeCat = cat !== undefined ? cat : kbActiveFilter;
   var grid = document.getElementById('kbGrid');
   var cards = grid.querySelectorAll('.kb-card');
   var noRes = grid.querySelector('.kb-no-results');
@@ -2168,15 +2264,17 @@ function filterKB(query){
   cards.forEach(function(card, i){
     var item = KB_ITEMS[i];
     if(!item) return;
+    var catMatch = activeCat === 'all' || (item.cat || 'security') === activeCat;
     var searchText = (rt(item.title)+' '+rt(item.body)+' '+item.tags.join(' ')+' '+item.source+' '+rt(item.detail)).toLowerCase();
-    if(!q || searchText.indexOf(q) >= 0){
+    var qMatch = !q || searchText.indexOf(q) >= 0;
+    if(catMatch && qMatch){
       card.style.display = '';
       anyVisible = true;
     } else {
       card.style.display = 'none';
     }
   });
-  if(!anyVisible && q){
+  if(!anyVisible){
     var noDiv = document.createElement('div');
     noDiv.className = 'kb-no-results';
     noDiv.textContent = t('kb-no-results');
