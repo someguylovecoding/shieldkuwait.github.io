@@ -12,37 +12,60 @@
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
-    <div class="logo-icon">🛡</div>
-    <div class="logo-text">SHIELD<span>KW</span></div>
-  </div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <button class="menu-toggle" id="menuToggle" onclick="toggleMobileSidebar()" aria-label="Menu">☰</button>
-    <div class="hbadge"><span class="hdot"></span><span data-i18n="live-feed">LIVE THREAT FEED</span></div>
-    <div id="clock"></div>
-    <button id="langBtn" onclick="toggleLang()" style="font-size:0.65rem;font-family:monospace;padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:var(--panel);color:var(--accent);cursor:pointer;letter-spacing:1px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">عربي</button>
+  <div class="hdr-accent-top"></div>
+  <div class="hdr-inner">
+    <div class="logo">
+      <div class="logo-icon">🛡</div>
+      <div class="logo-info">
+        <div class="logo-text">SHIELD<span>KW</span></div>
+        <div class="logo-sub">Kuwait Cyber Intelligence</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="menu-toggle" id="menuToggle" onclick="toggleMobileSidebar()" aria-label="Menu">☰</button>
+      <div class="hbadge"><span class="hdot"></span><span data-i18n="live-feed">LIVE THREAT FEED</span></div>
+      <div class="hdr-clock-wrap">
+        <div id="clock"></div>
+        <div class="hdr-tz">AST</div>
+      </div>
+      <div class="hdr-vdiv"></div>
+      <button id="langBtn" onclick="toggleLang()">عربي</button>
+    </div>
   </div>
 </header>
 
 <!-- TAB BAR -->
 <div class="tabbar">
   <div class="tab active" onclick="switchTab('map',this)">
-    <span class="tab-icon">🗺️</span> <span data-i18n="tab-map">Community Threat Map</span>
+    <span class="tab-num">01</span>
+    <span class="tab-ico">🗺️</span>
+    <span class="tab-lbl" data-i18n="tab-map">Threat Map</span>
   </div>
   <div class="tab" onclick="switchTab('ai',this)">
-    <span class="tab-icon">🔍</span> <span data-i18n="tab-ai">Scam Detector</span>
+    <span class="tab-num">02</span>
+    <span class="tab-ico">🔍</span>
+    <span class="tab-lbl" data-i18n="tab-ai">Scam Detector</span>
   </div>
   <div class="tab" onclick="switchTab('sim',this)">
-    <span class="tab-icon">🎯</span> <span data-i18n="tab-sim">Phishing Simulator</span>
+    <span class="tab-num">03</span>
+    <span class="tab-ico">🎯</span>
+    <span class="tab-lbl" data-i18n="tab-sim">Phishing Sim</span>
   </div>
   <div class="tab" onclick="switchTab('kb',this)">
-    <span class="tab-icon">📚</span> <span data-i18n="tab-kb">Knowledge Base</span> <span class="tab-badge" id="kbCount"></span>
+    <span class="tab-num">04</span>
+    <span class="tab-ico">📚</span>
+    <span class="tab-lbl" data-i18n="tab-kb">Knowledge Base</span>
+    <span class="tab-badge" id="kbCount"></span>
   </div>
   <div class="tab" onclick="switchTab('stats',this)">
-    <span class="tab-icon">📊</span> <span data-i18n="tab-stats">Statistics</span>
+    <span class="tab-num">05</span>
+    <span class="tab-ico">📊</span>
+    <span class="tab-lbl" data-i18n="tab-stats">Statistics</span>
   </div>
   <div class="tab" onclick="switchTab('about',this)">
-    <span class="tab-icon">ℹ️</span> <span data-i18n="tab-about">About</span>
+    <span class="tab-num">06</span>
+    <span class="tab-ico">ℹ️</span>
+    <span class="tab-lbl" data-i18n="tab-about">About</span>
   </div>
 </div>
 
@@ -54,40 +77,64 @@
     <div class="layout">
       <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
       <aside class="sidebar" id="sidebar">
-        <div class="sidebar-stats">
-          <div class="mini-stat">
-            <div class="mini-stat-icon" style="background:rgba(0,212,255,0.1);color:var(--accent);">📊</div>
-            <div><div class="snum c1" id="sTotal">8</div><div class="slbl" data-i18n="total-reports">Total Reports</div></div>
+
+        <!-- Header -->
+        <div class="sidebar-hdr">
+          <div class="shdr-brand">
+            <div class="shdr-shield">🛡</div>
+            <div>
+              <div class="shdr-name">SHIELD<span>KW</span></div>
+              <div class="shdr-sub">Threat Intelligence</div>
+            </div>
           </div>
-          <div class="mini-stat">
-            <div class="mini-stat-icon" style="background:rgba(0,255,136,0.1);color:var(--green);">📅</div>
-            <div><div class="snum c2" id="sWeek">8</div><div class="slbl" data-i18n="this-week">This Week</div></div>
+          <div class="shdr-live"><span class="hdot"></span>LIVE</div>
+        </div>
+
+        <!-- KPI strip -->
+        <div class="sidebar-kpis">
+          <div class="skpi">
+            <div class="skpi-val c1" id="sTotal">—</div>
+            <div class="skpi-lbl" data-i18n="total-reports">Total</div>
           </div>
-          <div class="mini-stat">
-            <div class="mini-stat-icon" style="background:rgba(255,60,90,0.1);color:var(--red);">🚨</div>
-            <div><div class="snum c3" id="sCrit">2</div><div class="slbl" data-i18n="critical">Critical</div></div>
+          <div class="skpi-div"></div>
+          <div class="skpi">
+            <div class="skpi-val c2" id="sWeek">—</div>
+            <div class="skpi-lbl" data-i18n="this-week">Week</div>
           </div>
-          <div class="mini-stat">
-            <div class="mini-stat-icon" style="background:rgba(245,166,35,0.1);color:var(--orange);">🏷️</div>
-            <div><div class="snum c4" id="sTypes">4</div><div class="slbl" data-i18n="threat-types">Threat Types</div></div>
+          <div class="skpi-div"></div>
+          <div class="skpi">
+            <div class="skpi-val c3" id="sCrit">—</div>
+            <div class="skpi-lbl" data-i18n="critical">Critical</div>
+          </div>
+          <div class="skpi-div"></div>
+          <div class="skpi">
+            <div class="skpi-val c4" id="sTypes">—</div>
+            <div class="skpi-lbl" data-i18n="threat-types">Types</div>
           </div>
         </div>
-        <div class="filter-section">
-          <div class="sec-lbl" data-i18n="filter-lbl">// filter by severity</div>
+
+        <!-- Severity filter -->
+        <div class="sidebar-block">
+          <div class="sblock-hdr" data-i18n="filter-lbl">// filter by severity</div>
           <div class="filter-bar">
-            <button class="fbtn on" onclick="setFilter('all',this)" data-i18n="f-all">All</button>
-            <button class="fbtn fc" onclick="setFilter('Critical',this)" data-i18n="f-critical">Critical</button>
-            <button class="fbtn fh" onclick="setFilter('High',this)" data-i18n="f-high">High</button>
-            <button class="fbtn"    onclick="setFilter('Medium',this)" data-i18n="f-medium">Medium</button>
-            <button class="fbtn fl" onclick="setFilter('Low',this)" data-i18n="f-low">Low</button>
+            <button class="fbtn on"  onclick="setFilter('all',this)"      data-i18n="f-all">All</button>
+            <button class="fbtn fc"  onclick="setFilter('Critical',this)" data-i18n="f-critical">Critical</button>
+            <button class="fbtn fh"  onclick="setFilter('High',this)"     data-i18n="f-high">High</button>
+            <button class="fbtn"     onclick="setFilter('Medium',this)"   data-i18n="f-medium">Medium</button>
+            <button class="fbtn fl"  onclick="setFilter('Low',this)"      data-i18n="f-low">Low</button>
           </div>
         </div>
-        <div class="sec-lbl" data-i18n="recent-reports">// recent reports</div>
+
+        <!-- Recent reports -->
+        <div class="sblock-hdr" style="padding:10px 16px 5px" data-i18n="recent-reports">// recent reports</div>
         <div class="report-list" id="reportList"></div>
+
+        <!-- Footer -->
         <div class="sidebar-foot">
           <button class="rep-btn" onclick="openModal()" data-i18n="report-scam">⚠ Report a Scam</button>
           <button class="export-btn" onclick="exportReports()" title="Export Reports">📋 <span data-i18n="export-btn">Export</span></button>
         </div>
+
       </aside>
 
       <div class="map-wrap" id="mapWrap">
@@ -98,11 +145,11 @@
           <div class="tt-tags" id="ttTags"></div>
         </div>
         <div class="map-legend">
-          <div class="legend-title" data-i18n="map-legend">Legend</div>
-          <div class="legend-row"><span class="legend-dot" style="background:#ff3c5a;box-shadow:0 0 6px #ff3c5a;"></span><span data-i18n="f-critical">Critical</span></div>
-          <div class="legend-row"><span class="legend-dot" style="background:#f5a623;box-shadow:0 0 6px #f5a623;"></span><span data-i18n="f-high">High</span></div>
-          <div class="legend-row"><span class="legend-dot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff;"></span><span data-i18n="f-medium">Medium</span></div>
-          <div class="legend-row"><span class="legend-dot" style="background:#00ff88;box-shadow:0 0 6px #00ff88;"></span><span data-i18n="f-low">Low</span></div>
+          <div class="legend-title">// LEGEND</div>
+          <div class="legend-row"><span class="legend-dot" style="background:#ff3c5a;box-shadow:0 0 8px #ff3c5a80;"></span><span data-i18n="f-critical">Critical</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#f5a623;box-shadow:0 0 8px #f5a62380;"></span><span data-i18n="f-high">High</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#00d4ff;box-shadow:0 0 8px #00d4ff80;"></span><span data-i18n="f-medium">Medium</span></div>
+          <div class="legend-row"><span class="legend-dot" style="background:#00ff88;box-shadow:0 0 8px #00ff8880;"></span><span data-i18n="f-low">Low</span></div>
         </div>
       </div>
     </div>
@@ -327,65 +374,109 @@
 
   <!-- ══ PAGE: ABOUT ══ -->
   <div class="page" id="page-about">
-    <div class="about-page grid-bg">
+    <div class="about-page">
+
+      <!-- Hero -->
       <div class="about-hero">
-        <div class="about-logo-big">🛡</div>
-        <h2>SHIELD<span style="color:var(--accent)">KW</span></h2>
-        <p data-i18n="about-desc">ShieldKW is Kuwait's first community-driven AI cybersecurity awareness platform. Built to protect Kuwaiti citizens from digital threats through real-time threat mapping, AI-powered scam detection, and interactive security education.</p>
+        <div class="about-hero-rings">
+          <div class="ahr3"></div>
+          <div class="ahr2"></div>
+          <div class="ahr1"></div>
+          <div class="about-logo-big">🛡</div>
+        </div>
+        <div class="about-pretag">// PLATFORM OVERVIEW</div>
+        <h1 class="about-h1">SHIELD<span>KW</span></h1>
+        <p class="about-tagline" data-i18n="about-tagline">Kuwait's Community-Driven Cyber Intelligence Platform</p>
+        <p class="about-desc" data-i18n="about-desc">ShieldKW is Kuwait's first community-driven AI cybersecurity awareness platform. Built to protect Kuwaiti citizens from digital threats through real-time threat mapping, AI-powered scam detection, and interactive security education.</p>
       </div>
 
-      <div class="about-grid">
-        <div class="about-card">
-          <div class="about-card-icon">🗺️</div>
-          <h3 data-i18n="about-f1-title">Community Threat Map</h3>
-          <p data-i18n="about-f1-desc">Real-time interactive map showing reported cyber threats across all Kuwait governorates. Filter by severity, explore by area, and report new threats.</p>
+      <!-- Stats bar -->
+      <div class="about-stats-bar">
+        <div class="absb-item">
+          <span class="absb-num">50+</span>
+          <span class="absb-lbl" data-i18n="hl-reports">Threat Reports</span>
         </div>
-        <div class="about-card">
-          <div class="about-card-icon">🔍</div>
-          <h3 data-i18n="about-f2-title">Scam Detector</h3>
-          <p data-i18n="about-f2-desc">Paste any suspicious message and our pattern-based engine analyzes it for 50+ Kuwait-specific scam patterns — from fake KNET alerts to rental scams and chain messages.</p>
+        <div class="absb-div"></div>
+        <div class="absb-item">
+          <span class="absb-num">42</span>
+          <span class="absb-lbl" data-i18n="hl-scenarios">Phishing Scenarios</span>
         </div>
-        <div class="about-card">
-          <div class="about-card-icon">🎯</div>
-          <h3 data-i18n="about-f3-title">Phishing Simulator</h3>
-          <p data-i18n="about-f3-desc">Interactive quiz with 42 real-world Kuwaiti scam scenarios — 20 randomly selected each session. Test your ability to identify phishing, social engineering, and fraud attempts.</p>
+        <div class="absb-div"></div>
+        <div class="absb-item">
+          <span class="absb-num">18</span>
+          <span class="absb-lbl" data-i18n="hl-articles">KB Articles</span>
         </div>
-        <div class="about-card">
-          <div class="about-card-icon">📚</div>
-          <h3 data-i18n="about-f4-title">Knowledge Base</h3>
-          <p data-i18n="about-f4-desc">18 comprehensive cybersecurity articles covering NIST frameworks, Kuwait cybercrime law, bank security, social media privacy, and more.</p>
+        <div class="absb-div"></div>
+        <div class="absb-item">
+          <span class="absb-num">80+</span>
+          <span class="absb-lbl" data-i18n="hl-rules">Detection Rules</span>
         </div>
-        <div class="about-card">
-          <div class="about-card-icon">📊</div>
-          <h3 data-i18n="about-f5-title">Live Statistics</h3>
-          <p data-i18n="about-f5-desc">Real-time dashboard with threat breakdowns by type, severity, area, governorate, and timeline. Refresh anytime with the Refresh Now button.</p>
+        <div class="absb-div"></div>
+        <div class="absb-item">
+          <span class="absb-num">6</span>
+          <span class="absb-lbl" data-i18n="hl-govs">Governorates</span>
         </div>
-        <div class="about-card">
-          <div class="about-card-icon">🌐</div>
-          <h3 data-i18n="about-f6-title">Full Bilingual Support</h3>
-          <p data-i18n="about-f6-desc">Complete Arabic & English support with RTL layout switching, bilingual content across all pages, and Kuwaiti dialect detection in the AI engine.</p>
-        </div>
-      </div>
-
-
-      <div class="about-card" style="max-width:900px;width:100%;">
-        <div class="about-card-icon">⚡</div>
-        <h3 data-i18n="about-highlights-title">Project Highlights</h3>
-        <p data-i18n="about-highlights-desc">Key numbers and achievements of the ShieldKW platform.</p>
-        <div class="about-highlights-grid">
-          <div class="about-highlight-item"><span class="about-hl-num">50+</span><span class="about-hl-label" data-i18n="hl-reports">Demo Threat Reports</span></div>
-          <div class="about-highlight-item"><span class="about-hl-num">42</span><span class="about-hl-label" data-i18n="hl-scenarios">Phishing Scenarios</span></div>
-          <div class="about-highlight-item"><span class="about-hl-num">18</span><span class="about-hl-label" data-i18n="hl-articles">Knowledge Articles</span></div>
-          <div class="about-highlight-item"><span class="about-hl-num">80+</span><span class="about-hl-label" data-i18n="hl-rules">Scam Detection Rules</span></div>
-          <div class="about-highlight-item"><span class="about-hl-num">2</span><span class="about-hl-label" data-i18n="hl-langs">Languages (EN/AR)</span></div>
-          <div class="about-highlight-item"><span class="about-hl-num">6</span><span class="about-hl-label" data-i18n="hl-govs">Governorates Covered</span></div>
+        <div class="absb-div"></div>
+        <div class="absb-item">
+          <span class="absb-num">EN/AR</span>
+          <span class="absb-lbl" data-i18n="hl-langs">Languages</span>
         </div>
       </div>
 
+      <!-- Modules -->
+      <div class="about-section">
+        <div class="about-section-hdr">
+          <span class="absec-line"></span>
+          <span class="absec-title">// PLATFORM MODULES</span>
+          <span class="absec-line"></span>
+        </div>
+        <div class="about-modules">
+          <div class="amod-card">
+            <div class="amod-num">01</div>
+            <div class="amod-ico">🗺️</div>
+            <div class="amod-title" data-i18n="about-f1-title">Community Threat Map</div>
+            <div class="amod-desc" data-i18n="about-f1-desc">Real-time interactive map showing reported cyber threats across all Kuwait governorates.</div>
+          </div>
+          <div class="amod-card">
+            <div class="amod-num">02</div>
+            <div class="amod-ico">🔍</div>
+            <div class="amod-title" data-i18n="about-f2-title">Scam Detector</div>
+            <div class="amod-desc" data-i18n="about-f2-desc">Pattern-based engine analyzing 50+ Kuwait-specific scam patterns from fake KNET alerts to rental scams.</div>
+          </div>
+          <div class="amod-card">
+            <div class="amod-num">03</div>
+            <div class="amod-ico">🎯</div>
+            <div class="amod-title" data-i18n="about-f3-title">Phishing Simulator</div>
+            <div class="amod-desc" data-i18n="about-f3-desc">Interactive quiz with 42 real-world Kuwaiti scam scenarios to sharpen your threat detection skills.</div>
+          </div>
+          <div class="amod-card">
+            <div class="amod-num">04</div>
+            <div class="amod-ico">📚</div>
+            <div class="amod-title" data-i18n="about-f4-title">Knowledge Base</div>
+            <div class="amod-desc" data-i18n="about-f4-desc">18 cybersecurity articles covering NIST frameworks, Kuwait cybercrime law, and bank security.</div>
+          </div>
+          <div class="amod-card">
+            <div class="amod-num">05</div>
+            <div class="amod-ico">📊</div>
+            <div class="amod-title" data-i18n="about-f5-title">Live Statistics</div>
+            <div class="amod-desc" data-i18n="about-f5-desc">Real-time threat breakdowns by type, severity, area, governorate, and timeline.</div>
+          </div>
+          <div class="amod-card">
+            <div class="amod-num">06</div>
+            <div class="amod-ico">🌐</div>
+            <div class="amod-title" data-i18n="about-f6-title">Full Bilingual Support</div>
+            <div class="amod-desc" data-i18n="about-f6-desc">Complete Arabic &amp; English with RTL layout switching and Kuwaiti dialect detection.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
       <div class="about-footer">
-        <p>ShieldKW © 2026 — <span data-i18n="about-rights">All rights reserved.</span><br>
-        <span data-i18n="about-purpose">Built as a cybersecurity awareness initiative for the people of Kuwait.</span></p>
+        <div class="about-footer-line"></div>
+        <p>ShieldKW &copy; 2026 &mdash; <span data-i18n="about-rights">All rights reserved.</span></p>
+        <p class="about-fp2" data-i18n="about-purpose">Built as a cybersecurity awareness initiative for the people of Kuwait.</p>
       </div>
+
     </div>
   </div>
 
