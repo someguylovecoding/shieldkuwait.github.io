@@ -110,125 +110,190 @@
 
   <!-- ══ PAGE: AI VALIDATOR ══ -->
   <div class="page" id="page-ai">
-    <div class="ai-page grid-bg">
+    <div class="ai-page">
+
+      <!-- HERO -->
       <div class="ai-hero">
-        <h2 data-i18n="ai-title">🔍 Scam Detector</h2>
-        <p data-i18n="ai-subtitle">Paste any suspicious message, SMS, email, or link below. Our pattern-based engine will analyze it for phishing signals, scam patterns, and threats specific to Kuwait.</p>
-      </div>
-      <div class="examples-row">
-        <span class="ex-label" data-i18n="ai-try">Try:</span>
-        <button class="ex-btn" onclick="loadExample(0)"><span>🏛️</span> <span data-i18n="ex-civil">Civil ID</span></button>
-        <button class="ex-btn" onclick="loadExample(1)"><span>👥</span> <span data-i18n="ex-relative">Relative Scam</span></button>
-        <button class="ex-btn" onclick="loadExample(2)"><span>🔑</span> <span data-i18n="ex-otp">OTP Theft</span></button>
-        <button class="ex-btn" onclick="loadExample(3)"><span>📈</span> <span data-i18n="ex-invest">Fake Investment</span></button>
-        <button class="ex-btn" onclick="loadExample(4)"><span>✅</span> <span data-i18n="ex-legit">Legit Message</span></button>
-      </div>
-      <div class="ai-input-wrap">
-        <textarea class="ai-textarea" id="aiInput" dir="auto" data-i18n-placeholder="ai-placeholder" placeholder="Paste suspicious message here...&#10;&#10;Example: 'عزيزي المواطن، بطاقتك المدنية انتهت صلاحيتها. يرجى التجديد الفوري على الرابط: http://moi-kw.info/renew'" oninput="updateCharCount(this.value.length)"></textarea>
-        <div class="ai-controls">
-          <button class="ai-btn" id="aiBtn" onclick="runValidator()">
-            <span>🔍</span> <span data-i18n="analyze-btn">Analyze Message</span>
-          </button>
-          <button onclick="clearDetector()" style="background:none;border:1px solid var(--border);color:var(--muted2);border-radius:7px;padding:8px 14px;font-size:0.75rem;cursor:pointer;transition:all 0.15s;font-family:monospace;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted2)'" id="clearBtn" data-i18n="clear-btn">✕ Clear</button>
-          <span class="ai-hint" data-i18n="ai-hint">Supports Arabic & English</span>
-          <span id="aiCharCount" style="font-size:0.6rem;color:var(--muted);font-family:monospace;margin-left:auto;"></span>
+        <div class="ai-hero-icon">🛡️</div>
+        <h2 data-i18n="ai-title">كاشف الاحتيال</h2>
+        <p data-i18n="ai-subtitle">الصق أي رسالة مشبوهة أو SMS أو إيميل أو رابط. المحرك يحللها لأنماط تصيد واحتيال خاصة بالكويت.</p>
+        <div class="ai-stats-row">
+          <div class="ai-stat-pill"><span class="ai-stat-num">80+</span><span class="ai-stat-lbl" data-i18n="stat-patterns">نمط كشف</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🗣️</span><span class="ai-stat-lbl" data-i18n="stat-bilingual">عربي وإنجليزي</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🇰🇼</span><span class="ai-stat-lbl" data-i18n="stat-kuwait">خاص بالكويت</span></div>
         </div>
       </div>
+
+      <!-- INPUT CARD -->
+      <div class="ai-card" id="aiCard">
+        <div class="ai-card-top">
+          <span class="ai-card-label" data-i18n="paste-label">الصق الرسالة المشبوهة</span>
+          <div class="examples-inline">
+            <span class="ex-label-sm" data-i18n="ai-try">جرب:</span>
+            <button class="ex-chip" onclick="loadExample(0)">🏛️ <span data-i18n="ex-civil">بطاقة مدنية</span></button>
+            <button class="ex-chip" onclick="loadExample(1)">👥 <span data-i18n="ex-relative">نصب القريب</span></button>
+            <button class="ex-chip" onclick="loadExample(2)">🔑 <span data-i18n="ex-otp">سرقة OTP</span></button>
+            <button class="ex-chip" onclick="loadExample(3)">📈 <span data-i18n="ex-invest">استثمار وهمي</span></button>
+            <button class="ex-chip ex-safe" onclick="loadExample(4)">✅ <span data-i18n="ex-legit">رسالة شرعية</span></button>
+          </div>
+        </div>
+        <textarea class="ai-textarea" id="aiInput" dir="auto"
+          placeholder="الصق الرسالة هنا...&#10;&#10;مثال: عزيزي المواطن، بطاقتك المدنية انتهت صلاحيتها. يرجى التجديد الفوري على الرابط: http://moi-kw.info/renew"
+          oninput="updateCharCount(this.value.length)"></textarea>
+        <div class="ai-controls">
+          <span id="aiCharCount" class="ai-charcount"></span>
+          <div style="flex:1"></div>
+          <button class="ai-clear-btn" id="clearBtn" onclick="clearDetector()" data-i18n="clear-btn">✕ مسح</button>
+          <button class="ai-btn" id="aiBtn" onclick="runValidator()">
+            <span>🔍</span> <span data-i18n="analyze-btn">تحليل الرسالة</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULT PANEL -->
       <div class="ai-result" id="aiResult">
-        <div class="result-header" id="resultHeader"></div>
-        <div class="risk-bar-wrap">
+        <div class="verdict-banner" id="resultHeader"></div>
+        <div class="risk-section">
           <div class="risk-label" data-i18n="risk-score">RISK SCORE</div>
-          <div class="risk-bar"><div class="risk-fill" id="riskFill"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:0.6rem;color:var(--muted2);font-family:monospace;">
-            <span data-i18n="risk-low">LOW</span><span data-i18n="risk-med">MEDIUM</span><span data-i18n="risk-high-lbl">HIGH</span><span data-i18n="risk-crit-lbl">CRITICAL</span>
+          <div class="risk-track"><div class="risk-fill" id="riskFill"></div></div>
+          <div class="risk-scale">
+            <span data-i18n="risk-low">LOW</span>
+            <span data-i18n="risk-med">MEDIUM</span>
+            <span data-i18n="risk-high-lbl">HIGH</span>
+            <span data-i18n="risk-crit-lbl">CRITICAL</span>
           </div>
         </div>
         <div class="result-signals" id="resultSignals"></div>
-        <div id="aiActions" style="padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px;"></div>
+        <div class="ai-actions-wrap" id="aiActions"></div>
       </div>
+
     </div>
   </div>
 
   <!-- ══ PAGE: PHISHING SIMULATOR ══ -->
   <div class="page" id="page-sim">
-    <div class="sim-page grid-bg">
+    <div class="sim-page">
+
+      <!-- HERO -->
       <div class="sim-hero">
-        <h2 data-i18n="sim-title">🎯 Phishing Simulator</h2>
-        <p data-i18n="sim-subtitle">Test your ability to spot real Kuwaiti scams. Can you identify the threat?</p>
+        <div class="sim-hero-icon">🎯</div>
+        <h2 data-i18n="sim-title">محاكي التصيد</h2>
+        <p data-i18n="sim-subtitle">اختبر قدرتك على اكتشاف النصب الكويتي. هل تستطيع تحديد التهديد؟</p>
+        <div class="sim-stats-row">
+          <div class="ai-stat-pill"><span class="ai-stat-num">42</span><span class="ai-stat-lbl" data-i18n="stat-scenarios">سيناريو</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🔀</span><span class="ai-stat-lbl" data-i18n="stat-random">عشوائي</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🇰🇼</span><span class="ai-stat-lbl" data-i18n="stat-kuwait">كويتي 100%</span></div>
+        </div>
       </div>
-      <div class="sim-progress">
-        <span id="simQNum">Q 1/5</span>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="sim-tracker">
+        <div class="sim-tracker-top">
+          <span id="simQNum" class="sim-qnum"></span>
+          <span id="simStreak" class="sim-streak"></span>
+          <span id="simScore" class="sim-score-lbl"></span>
+        </div>
         <div class="progress-bar"><div class="progress-fill" id="simProgress" style="width:0%"></div></div>
-        <span id="simScore">Score: 0</span>
-        <span id="simStreak" style="font-size:0.7rem;color:#f5a623;font-weight:700;min-width:48px;"></span>
-        <span id="simBest" style="font-size:0.6rem;color:var(--muted2);font-family:monospace;"></span>
+        <div class="sim-tracker-bot">
+          <span id="simBest" class="sim-best"></span>
+        </div>
       </div>
+
+      <!-- SCENARIO CARD -->
       <div class="scenario-card" id="scenarioCard">
         <div class="scenario-top">
-          <span style="font-size:18px">📱</span>
-          <div>
+          <div class="scenario-msg-icon" id="simMsgIcon">📱</div>
+          <div class="scenario-header-info">
             <div class="scenario-from" id="simFrom"></div>
-            <div style="font-size:0.75rem;font-weight:600;color:#fff;" id="simSubject"></div>
+            <div class="scenario-subject" id="simSubject"></div>
           </div>
         </div>
         <div class="scenario-body" id="simBody"></div>
         <div class="scenario-q" id="simQuestion"></div>
         <div class="sim-options" id="simOptions"></div>
         <div class="sim-feedback" id="simFeedback"></div>
-        <button class="sim-next" id="simNext" onclick="nextScenario()" data-i18n="sim-next">Next Scenario →</button>
+        <button class="sim-next" id="simNext" onclick="nextScenario()" data-i18n="sim-next">السيناريو التالي →</button>
       </div>
+
+      <!-- SCORE CARD -->
       <div class="score-card" id="scoreCard">
+        <div class="score-trophy">🏆</div>
         <div class="score-big" id="scoreFinal"></div>
-        <div class="score-label" data-i18n="score-label">out of</div>
+        <div class="score-label" data-i18n="score-label">من أصل 20</div>
         <div class="score-msg" id="scoreMsg"></div>
-        <button class="restart-btn" onclick="restartSim()" data-i18n="try-again">🔄 Try Again</button>
+        <button class="restart-btn" onclick="restartSim()" data-i18n="try-again">🔄 العب مجدداً</button>
       </div>
+
     </div>
   </div>
 
   <!-- ══ PAGE: KNOWLEDGE BASE ══ -->
   <div class="page" id="page-kb">
-    <div class="kb-page" id="kbGrid">
+    <div class="kb-page">
+
+      <!-- HERO -->
+      <div class="kb-hero">
+        <div class="kb-hero-icon">📚</div>
+        <h2 data-i18n="kb-title">قاعدة المعرفة</h2>
+        <p data-i18n="kb-subtitle">مقالات أمن سيبراني منتقاة مع روابط للمصادر الرسمية</p>
+        <div class="kb-stats-row">
+          <div class="ai-stat-pill"><span class="ai-stat-num" id="kbCount">—</span><span class="ai-stat-lbl" data-i18n="stat-articles">مقالة</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🔗</span><span class="ai-stat-lbl" data-i18n="stat-sources">مصادر حقيقية</span></div>
+          <div class="ai-stat-pill"><span class="ai-stat-num">🇰🇼</span><span class="ai-stat-lbl" data-i18n="stat-kuwait">محتوى كويتي</span></div>
+        </div>
+      </div>
+
+      <!-- SEARCH -->
       <div class="kb-search-wrap">
         <span class="kb-search-icon">🔍</span>
-        <input type="text" class="kb-search" id="kbSearch" data-i18n-placeholder="kb-search-ph" placeholder="Search knowledge base..." oninput="filterKB(this.value)">
+        <input type="text" class="kb-search" id="kbSearch" data-i18n-placeholder="kb-search-ph" placeholder="ابحث في قاعدة المعرفة..." oninput="filterKB(this.value)">
       </div>
+
+      <!-- CATEGORY FILTERS -->
+      <div class="kb-filters" id="kbFilters"></div>
+
+      <!-- CARD GRID -->
+      <div class="kb-grid" id="kbGrid"></div>
+
     </div>
   </div>
 
   <!-- ══ PAGE: STATISTICS ══ -->
   <div class="page" id="page-stats">
-    <div class="stats-page grid-bg">
+    <div class="stats-page">
 
-      <!-- Top KPI row — updated by JS -->
-      <div class="stats-row">
-        <div class="stat-big">
-          <div class="stat-big-num c1" id="st-total">—</div>
-          <div class="stat-big-lbl" data-i18n="total-incidents">Total Incidents</div>
-        </div>
-        <div class="stat-big">
-          <div class="stat-big-num c3" id="st-critical">—</div>
-          <div class="stat-big-lbl" data-i18n="stat-critical">Critical</div>
-        </div>
-        <div class="stat-big">
-          <div class="stat-big-num c4" id="st-phishing">—</div>
-          <div class="stat-big-lbl" data-i18n="phishing-attacks">Phishing Attacks</div>
-        </div>
-        <div class="stat-big">
-          <div class="stat-big-num c2" id="st-types">—</div>
-          <div class="stat-big-lbl" data-i18n="threat-cats">Threat Categories</div>
+      <!-- HERO -->
+      <div class="stats-hero">
+        <div class="stats-hero-icon">📊</div>
+        <h2 data-i18n="stats-title">Live Statistics</h2>
+        <p data-i18n="stats-subtitle">Real-time threat intelligence dashboard for Kuwait — updated live from community reports.</p>
+        <div class="ai-stats-row">
+          <div class="ai-stat-pill">
+            <span class="ai-stat-num c1" id="st-total">—</span>
+            <span class="ai-stat-lbl" data-i18n="total-incidents">Total Incidents</span>
+          </div>
+          <div class="ai-stat-pill">
+            <span class="ai-stat-num" style="color:var(--red)" id="st-critical">—</span>
+            <span class="ai-stat-lbl" data-i18n="stat-critical">Critical</span>
+          </div>
+          <div class="ai-stat-pill">
+            <span class="ai-stat-num" style="color:var(--orange)" id="st-phishing">—</span>
+            <span class="ai-stat-lbl" data-i18n="phishing-attacks">Phishing</span>
+          </div>
+          <div class="ai-stat-pill">
+            <span class="ai-stat-num c2" id="st-types">—</span>
+            <span class="ai-stat-lbl" data-i18n="threat-cats">Categories</span>
+          </div>
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 2px 0;">
-        <span style="font-size:0.6rem;color:var(--muted2);font-family:monospace;">
-          🕐 Last updated: <span id="st-lastupdate">—</span>
-        </span>
-        <button onclick="renderStats(true)" data-i18n="refresh-now" style="font-size:0.6rem;color:var(--accent);background:none;border:1px solid var(--border);border-radius:4px;padding:3px 9px;cursor:pointer;font-family:monospace;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-          ↻ Refresh Now
-        </button>
+      <!-- REFRESH BAR -->
+      <div class="stats-refresh-bar">
+        <span class="stats-last-update">🕐 <span id="st-lastupdate">—</span></span>
+        <button class="stats-refresh-btn" onclick="renderStats(true)" data-i18n="refresh-now">↻ Refresh Now</button>
       </div>
 
+      <!-- CHARTS -->
       <div class="charts-grid">
         <!-- By Type -->
         <div class="chart-box">
@@ -245,7 +310,7 @@
           <div class="chart-title" data-i18n="area-heat">// incidents by area (top 12)</div>
           <div class="area-heatmap" id="st-area-heat"></div>
         </div>
-        <!-- Timeline — last 7 days -->
+        <!-- Timeline -->
         <div class="chart-box">
           <div class="chart-title" id="st-tl-title">// reports timeline</div>
           <div class="timeline" id="st-timeline"></div>
@@ -302,25 +367,6 @@
         </div>
       </div>
 
-      <div class="about-card" style="max-width:900px;width:100%;">
-        <div class="about-card-icon">⚙️</div>
-        <h3 data-i18n="about-tech-title">Technology Stack</h3>
-        <p data-i18n="about-tech-desc">Built with modern web technologies for a fast, responsive, and secure experience.</p>
-        <div class="about-tech">
-          <span class="about-tech-tag">HTML5 Semantic</span>
-          <span class="about-tech-tag">CSS3 / Animations</span>
-          <span class="about-tech-tag">Vanilla JavaScript (ES5)</span>
-          <span class="about-tech-tag">Leaflet.js Maps</span>
-          <span class="about-tech-tag">CartoDB Dark Tiles</span>
-          <span class="about-tech-tag">Pattern-Based NLP</span>
-          <span class="about-tech-tag">Bilingual i18n Engine</span>
-          <span class="about-tech-tag">LocalStorage API</span>
-          <span class="about-tech-tag">Responsive Flexbox / Grid</span>
-          <span class="about-tech-tag">Web Accessibility (WCAG)</span>
-          <span class="about-tech-tag">CSV Data Export</span>
-          <span class="about-tech-tag">Real-Time Data Rotation</span>
-        </div>
-      </div>
 
       <div class="about-card" style="max-width:900px;width:100%;">
         <div class="about-card-icon">⚡</div>
