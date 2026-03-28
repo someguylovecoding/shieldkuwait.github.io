@@ -119,6 +119,7 @@ var I18N = {
   'hl-rules':      {en:'Scam Detection Rules', ar:'قاعدة كشف احتيال'},
   'hl-langs':      {en:'Languages (EN/AR)', ar:'لغات (EN/AR)'},
   'hl-govs':       {en:'Governorates Covered', ar:'محافظات مغطاة'},
+  'about-tagline':   {en:"Kuwait's Community-Driven Cyber Intelligence Platform", ar:'منصة الاستخبارات السيبرانية المجتمعية للكويت'},
   'about-rights':    {en:'All rights reserved.', ar:'جميع الحقوق محفوظة.'},
   'about-purpose':   {en:'Built as a cybersecurity awareness initiative for the people of Kuwait.', ar:'مبنية كمبادرة توعية بالأمن السيبراني لأبناء الكويت.'},
   'export-btn':      {en:'Export', ar:'تصدير'},
@@ -622,14 +623,24 @@ function renderList(){
   var vis=activeFilter==='all'?reports:reports.filter(function(r){return r.sev===activeFilter;});
   var h='';
   vis.forEach(function(r){
-    var srcBadge = r.userSubmitted
-      ? '<span style="font-size:0.55rem;background:rgba(0,255,136,0.1);color:#00ff88;border:1px solid rgba(0,255,136,0.3);border-radius:3px;padding:1px 5px;margin-left:4px;">'+t('source-community')+'</span>'
-      : '<span style="font-size:0.55rem;background:rgba(83,104,128,0.2);color:var(--muted2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;margin-left:4px;">'+t('source-demo')+'</span>';
+    var srcTag = r.userSubmitted
+      ? '<span class="rsrc-live">▶ LIVE</span>'
+      : '<span class="rsrc-demo">SIM</span>';
     var sevLabel = SEV_DISPLAY[r.sev] ? (SEV_DISPLAY[r.sev][LANG]||r.sev) : r.sev;
-    h+='<div class="rcard '+(SK[r.sev]||'')+'" id="card-'+r.id+'" onclick="highlightCard('+r.id+')">'+
-      '<div class="rcard-top"><div class="rcard-title">'+esc(rt(r.title))+srcBadge+'</div>'+
-      '<span class="badge '+(BK[r.sev]||'bm')+'">'+sevLabel+'</span></div>'+
-      '<div class="rcard-meta"><span>📍 '+esc(r.area)+'</span><span class="rcard-type">'+esc(rt(r.type))+'</span></div></div>';
+    h+='<div class="rcard '+(SK[r.sev]||'')+'" id="card-'+r.id+'" onclick="highlightCard('+r.id+')">' +
+      '<div class="rcard-stripe"></div>' +
+      '<div class="rcard-inner">' +
+        '<div class="rcard-row1">' +
+          '<span class="rsev-pill '+(BK[r.sev]||'bm')+'">'+sevLabel+'</span>' +
+          srcTag +
+        '</div>' +
+        '<div class="rcard-title">'+esc(rt(r.title))+'</div>' +
+        '<div class="rcard-row2">' +
+          '<span class="rcard-loc">📍 '+esc(r.area)+'</span>' +
+          '<span class="rcard-type-chip">'+esc(rt(r.type))+'</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   });
   document.getElementById('reportList').innerHTML=h||'<div style="padding:16px;text-align:center;font-size:0.7rem;color:var(--muted2)">No reports.</div>';
 }
