@@ -96,6 +96,18 @@ var I18N = {
   'kb-no-results':  {en:'No articles found matching your search.', ar:'لا توجد مقالات مطابقة لبحثك.'},
   // About
   'tab-about':      {en:'About', ar:'حول'},
+  'tab-pwd':        {en:'Password Check', ar:'فحص كلمة المرور'},
+  'tab-link':       {en:'Link Scanner', ar:'فاحص الروابط'},
+  'tab-csl':        {en:'Checklist', ar:'قائمة التحقق'},
+  'pwd-title':      {en:'Password Strength Checker', ar:'فاحص قوة كلمة المرور'},
+  'pwd-sub':        {en:'100% client-side — your password is never transmitted or stored.', ar:'100% محلي — كلمة مرورك لا تُرسل أو تُخزّن أبداً.'},
+  'pwd-gen':        {en:'⚡ Generate Strong Password', ar:'⚡ توليد كلمة مرور قوية'},
+  'link-title':     {en:'Link & URL Scanner', ar:'فاحص الروابط والعناوين'},
+  'link-sub':       {en:'Paste any URL to detect phishing, suspicious domains, and redirect tricks.', ar:'الصق أي رابط للكشف عن التصيد والنطاقات المشبوهة.'},
+  'link-scan':      {en:'Scan →', ar:'فحص →'},
+  'csl-title':      {en:'Personal Security Checklist', ar:'قائمة تحقق الأمان الشخصي'},
+  'csl-sub':        {en:'Rate your cybersecurity hygiene. Progress saves automatically in your browser.', ar:'قيّم مستوى أمانك الرقمي. تُحفظ تلقائياً في متصفحك.'},
+  'share-result':   {en:'Copy Result', ar:'نسخ النتيجة'},
   'about-desc':     {en:'ShieldKW is Kuwait\'s first community-driven AI cybersecurity awareness platform. Built to protect Kuwaiti citizens from digital threats through real-time threat mapping, AI-powered scam detection, and interactive security education.', ar:'ShieldKW هي أول منصة كويتية مجتمعية للتوعية بالأمن السيبراني بالذكاء الاصطناعي. مصممة لحماية المواطنين الكويتيين من التهديدات الرقمية عبر خرائط التهديدات الحية وكشف الاحتيال بالذكاء الاصطناعي والتعليم الأمني التفاعلي.'},
   'about-f1-title': {en:'Community Threat Map', ar:'خريطة التهديدات المجتمعية'},
   'about-f1-desc':  {en:'Real-time interactive map showing reported cyber threats across all Kuwait governorates. Filter by severity, explore by area, and report new threats.', ar:'خريطة تفاعلية حية تعرض التهديدات السيبرانية المبلّغ عنها في جميع محافظات الكويت. فلتر حسب الخطورة واستكشف حسب المنطقة وأبلغ عن تهديدات جديدة.'},
@@ -478,8 +490,23 @@ function rotateDemoReports(){
   userReps.forEach(function(r){ reports.unshift(r); });
 }
 rotateDemoReports();
+
+// Assign timestamps to reports (distributing across last 60 days)
+(function assignTimestamps(){
+  var now=Date.now();
+  var day=86400000;
+  reports.forEach(function(r,i){
+    if(!r.ts){
+      r.ts=now-(i%60)*day-(Math.random()*day*0.5);
+    }
+  });
+})();
+
 setInterval(function(){
   rotateDemoReports();
+  // Re-assign timestamps after rotation
+  var now=Date.now();var day=86400000;
+  reports.forEach(function(r,i){if(!r.ts){r.ts=now-(i%60)*day-(Math.random()*day*0.5);}});
   renderList();renderMarkers();renderSidebarStats();renderStats(true);
 }, 1800000);
 
@@ -530,6 +557,13 @@ document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-K
 // MAP — Leaflet
 // ══════════════════════════════════════════
 var leafletMap, markerLayer;
+var mapMode='markers';
+var clustersEnabled=false;
+var regionsEnabled=false;
+var timelineDays=0;
+var heatLayer=null;
+var regionLayer=null;
+var markerClusterGroup=null;
 
 function initMap(){
   leafletMap = L.map('leafletMap', {
@@ -556,10 +590,46 @@ function fitMapToMarkers(){
   leafletMap.fitBounds(group.getBounds().pad(0.15), {maxZoom:12});
 }
 
+function getFilteredReports(){
+  if(timelineDays===0) return reports;
+  var cutoff=Date.now()-timelineDays*86400000;
+  return reports.filter(function(r){return (r.ts||0)>=cutoff;});
+}
+
 function renderMarkers(){
-  if(!markerLayer) return;
-  markerLayer.clearLayers();
-  var vis = activeFilter==='all' ? reports : reports.filter(function(r){ return r.sev===activeFilter; });
+  if(!leafletMap) return;
+  // Remove existing layers
+  if(markerLayer){markerLayer.clearLayers();}
+  if(markerClusterGroup){leafletMap.removeLayer(markerClusterGroup);markerClusterGroup=null;}
+  if(heatLayer){leafletMap.removeLayer(heatLayer);heatLayer=null;}
+
+  var filtered=getFilteredReports();
+  var vis = activeFilter==='all' ? filtered : filtered.filter(function(r){ return r.sev===activeFilter; });
+
+  if(mapMode==='heat'){
+    // Build heatmap points
+    var heatPoints=[];
+    vis.forEach(function(r){
+      var city=CITIES[r.area];if(!city)return;
+      var intensity=r.sev==='Critical'?1.0:r.sev==='High'?0.7:r.sev==='Medium'?0.4:0.2;
+      heatPoints.push([city.lat,city.lng,intensity]);
+    });
+    if(typeof L.heatLayer==='function'){
+      heatLayer=L.heatLayer(heatPoints,{radius:35,blur:25,maxZoom:13}).addTo(leafletMap);
+    }
+    return;
+  }
+
+  // Marker mode
+  var targetLayer;
+  if(clustersEnabled && typeof L.markerClusterGroup==='function'){
+    markerClusterGroup=L.markerClusterGroup();
+    targetLayer=markerClusterGroup;
+  } else {
+    if(!markerLayer) markerLayer=L.layerGroup().addTo(leafletMap);
+    targetLayer=markerLayer;
+  }
+
   vis.forEach(function(r){
     var city = CITIES[r.area]; if(!city) return;
     var col = SC[r.sev] || '#00d4ff';
@@ -567,22 +637,22 @@ function renderMarkers(){
     var h2 = ((r.id * 340573 + _demoSeed * 17957) >>> 0) % 10000;
     var jLat = (h1 / 10000 - 0.5) * 0.003;
     var jLng = (h2 / 10000 - 0.5) * 0.003;
-    // Pulsing glow for Critical only
-    if(r.sev==='Critical'){
+    // Pulsing glow for Critical only (only in non-cluster mode)
+    if(r.sev==='Critical' && !clustersEnabled){
       var pulseIcon = L.divIcon({
         className:'',
         html:'<div class="map-pulse" style="background:'+col+';"></div>',
         iconSize:[32,32],
         iconAnchor:[16,16]
       });
-      L.marker([city.lat+jLat, city.lng+jLng], {icon:pulseIcon, interactive:false}).addTo(markerLayer);
+      L.marker([city.lat+jLat, city.lng+jLng], {icon:pulseIcon, interactive:false}).addTo(markerLayer||leafletMap);
     }
     var rad = r.sev==='Critical'?9:r.sev==='High'?7:r.sev==='Medium'?6:5;
-    // Outer glow ring for High+
-    if(r.sev==='Critical'||r.sev==='High'){
+    // Outer glow ring for High+ (non-cluster)
+    if((r.sev==='Critical'||r.sev==='High') && !clustersEnabled){
       L.circleMarker([city.lat+jLat, city.lng+jLng], {
         radius: rad+4,fillColor:col,color:'transparent',weight:0,fillOpacity:0.12,interactive:false
-      }).addTo(markerLayer);
+      }).addTo(markerLayer||leafletMap);
     }
     var marker = L.circleMarker([city.lat+jLat, city.lng+jLng], {
       radius: rad,
@@ -591,7 +661,7 @@ function renderMarkers(){
       weight: 1,
       opacity: 1,
       fillOpacity: r.sev==='Critical'?0.9:r.sev==='High'?0.8:0.65
-    }).addTo(markerLayer);
+    });
     var tagStyle='font-size:10px;padding:2px 6px;border-radius:4px;';
     marker.bindPopup(
       '<div style="font-family:\'Segoe UI\',sans-serif;min-width:180px;">'+
@@ -606,9 +676,87 @@ function renderMarkers(){
       {className:'dark-popup', maxWidth:280}
     );
     marker.on('click', function(){ highlightCard(r.id); });
+    marker.addTo(targetLayer);
   });
+
+  if(clustersEnabled && markerClusterGroup){
+    markerClusterGroup.addTo(leafletMap);
+  }
   fitMapToMarkers();
 }
+function setMapMode(mode,btn){
+  mapMode=mode;
+  document.querySelectorAll('#mctMarkers,#mctHeat').forEach(function(b){b.classList.remove('mcb-active');});
+  btn.classList.add('mcb-active');
+  renderMarkers();
+}
+
+function toggleClusters(btn){
+  clustersEnabled=!clustersEnabled;
+  btn.classList.toggle('mcb-active',clustersEnabled);
+  renderMarkers();
+}
+
+function toggleRegions(btn){
+  regionsEnabled=!regionsEnabled;
+  btn.classList.toggle('mcb-active',regionsEnabled);
+  if(regionsEnabled) showRegions();
+  else if(regionLayer){leafletMap.removeLayer(regionLayer);regionLayer=null;}
+}
+
+function setTimeline(days,btn){
+  timelineDays=days;
+  document.querySelectorAll('.mcb-tl-btn').forEach(function(b){b.classList.remove('mcb-tl-active');});
+  btn.classList.add('mcb-tl-active');
+  renderMarkers();
+  renderList();
+  renderSidebarStats();
+}
+
+var GOVERNORATES=[
+  {name:'Al Asimah',nameAr:'العاصمة',coords:[[29.38,47.95],[29.38,48.01],[29.32,48.01],[29.27,47.97],[29.27,47.93],[29.30,47.90],[29.35,47.90]]},
+  {name:'Hawalli',nameAr:'حولي',coords:[[29.32,48.01],[29.33,48.10],[29.24,48.10],[29.24,48.01]]},
+  {name:'Farwaniya',nameAr:'الفروانية',coords:[[29.27,47.93],[29.30,47.90],[29.27,47.85],[29.18,47.90],[29.18,47.97],[29.24,48.01],[29.24,47.93]]},
+  {name:'Ahmadi',nameAr:'الأحمدي',coords:[[29.18,47.97],[29.18,48.10],[29.00,48.20],[28.55,48.20],[28.55,47.80],[29.00,47.80],[29.10,47.85],[29.18,47.90]]},
+  {name:'Jahra',nameAr:'الجهراء',coords:[[29.38,47.40],[29.70,47.40],[29.70,47.95],[29.38,47.95],[29.38,47.80],[29.30,47.80],[29.30,47.85],[29.27,47.85],[29.27,47.93],[29.35,47.90]]},
+  {name:'Mubarak Al-Kabeer',nameAr:'مبارك الكبير',coords:[[29.24,48.01],[29.24,48.10],[29.15,48.10],[29.12,48.05],[29.18,47.97]]},
+];
+
+function countAreaReports(govName){
+  var filtered=getFilteredReports();
+  var areaMap={
+    'Al Asimah':['Kuwait City','Sharq','Rumaithiya','Surra','Bayan','Shuwaikh Industrial','Nugra'],
+    'Hawalli':['Hawalli','Salmiya','Rumaithiya','Mishref','Dasma','Qadisiya','Bidaa'],
+    'Farwaniya':['Farwaniya','Ardiya','Khaitan','Fahaheel','Reggae'],
+    'Ahmadi':['Ahmadi','Fintas','Mangaf','Mahboula','Fahaheel','Shuwakh'],
+    'Jahra':['Jahra','Qortuba','Sabah Al-Salem'],
+    'Mubarak Al-Kabeer':['Sabah Al-Salem','Mubarak Al-Kabeer'],
+  };
+  var areas=areaMap[govName]||[];
+  return filtered.filter(function(r){return areas.some(function(a){return r.area.includes(a);});}).length;
+}
+
+function showRegions(){
+  if(!leafletMap) return;
+  if(regionLayer){leafletMap.removeLayer(regionLayer);}
+  var maxCount=Math.max.apply(null,GOVERNORATES.map(function(g){return countAreaReports(g.name)||1;}));
+  var layerGroup=L.layerGroup();
+  GOVERNORATES.forEach(function(gov){
+    var count=countAreaReports(gov.name);
+    var intensity=Math.max(0.08,Math.min(0.5,count/maxCount*0.5+0.08));
+    var poly=L.polygon(gov.coords,{
+      color:'rgba(0,212,255,0.6)',
+      weight:1,
+      fillColor:'#00d4ff',
+      fillOpacity:intensity,
+    });
+    poly.bindTooltip('<b>'+(LANG==='ar'?gov.nameAr:gov.name)+'</b><br>'+count+' reports',{className:'map-tooltip',sticky:true});
+    layerGroup.addLayer(poly);
+  });
+  layerGroup.addTo(leafletMap);
+  regionLayer=layerGroup;
+}
+
 function rt(v){ return typeof v==='object' ? (v[LANG]||v.en||v.ar||'') : (v||''); }
 function esc(s){
   if(!s) return '';
@@ -874,6 +1022,7 @@ function renderStats(animate){
       el.style.width = el.getAttribute('data-gov-w')+'%';
     });
   }, 60);
+  renderWeekComparison();
 }
 
 // ── Sidebar stats (map tab counters)
@@ -2191,7 +2340,10 @@ function buildKB(){
   if(badge) badge.textContent = KB_ITEMS.length;
   kbActiveFilter = 'all';
   buildKBFilters();
+  var kbSaved = {};
+  try { kbSaved = JSON.parse(localStorage.getItem('shieldkw_kb_read')||'{}'); } catch(e){}
   KB_ITEMS.forEach(function(item, i){
+    var isRead = !!kbSaved['kb_'+i];
     var card = document.createElement('div');
     card.className = 'kb-card';
     card.setAttribute('data-cat', item.cat || 'security');
@@ -2207,20 +2359,26 @@ function buildKB(){
       '<div class="kb-body-wrap">'+
         '<div class="kb-summary">'+rt(item.body)+'</div>'+
         '<div class="kb-tags">'+
-          item.tags.map(function(t){ return '<span class="kb-tag">'+t+'</span>'; }).join('')+
+          item.tags.map(function(tg){ return '<span class="kb-tag">'+tg+'</span>'; }).join('')+
         '</div>'+
       '</div>'+
       '<div class="kb-footer">'+
         '<button class="kb-read-btn">'+t('kb-read')+'</button>'+
+        '<button class="kb-mark-btn krb-todo'+(isRead?' krb-done':'')+'">'+
+          (isRead ? (LANG==='ar'?'✓ قرأت':'✓ Read') : (LANG==='ar'?'تعلّمت هذا':'Mark as Read'))+
+        '</button>'+
         '<a href="'+item.link+'" target="_blank" class="kb-ext-link" onclick="event.stopPropagation()">'+item.source+' ↗</a>'+
       '</div>';
-    var btn = card.querySelector('.kb-read-btn');
-    btn.addEventListener('click', function(e){ e.stopPropagation(); openKB(i); });
+    var readBtn = card.querySelector('.kb-read-btn');
+    readBtn.addEventListener('click', function(e){ e.stopPropagation(); openKB(i); });
+    var markBtn = card.querySelector('.kb-mark-btn');
+    (function(idx, btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); toggleKbRead(idx, btn); }); })(i, markBtn);
     card.addEventListener('click', function(){ openKB(i); });
     card.addEventListener('mouseenter', function(){ card.style.borderColor = item.color+'80'; });
     card.addEventListener('mouseleave', function(){ card.style.borderColor = ''; });
     grid.appendChild(card);
   });
+  updateKbProgress();
 }
 
 // Close KB modal on bg click
@@ -2385,13 +2543,588 @@ window.addEventListener('resize',function(){
   if(leafletMap && document.getElementById('page-map').classList.contains('active')) leafletMap.invalidateSize();
 });
 
+// ══════════════════════════════════════════
+// PASSWORD CHECKER
+// ══════════════════════════════════════════
+var COMMON_PASSWORDS = ['password','123456','qwerty','kuwait','admin','letmein','welcome','111111','123123','abc123','password1','iloveyou','monkey','dragon','master','1234567890','000000','pass','test','login','sunshine','princess','football','shadow','superman','michael','charlie','donald','password123','q1w2e3'];
+var KEYBOARD_WALKS = ['qwerty','asdfgh','zxcvbn','qazwsx','1234567','abcdef','123456','654321','abcd','qwer','asdf'];
+
+function togglePwdVis(){
+  var inp = document.getElementById('pwdInput');
+  var btn = document.getElementById('pwdEye');
+  if(!inp) return;
+  if(inp.type === 'password'){
+    inp.type = 'text';
+    if(btn) btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    if(btn) btn.textContent = '👁';
+  }
+}
+
+function checkPassword(){
+  var pwd = (document.getElementById('pwdInput')||{}).value || '';
+  var results = document.getElementById('pwdResults');
+  if(!results) return;
+
+  if(!pwd){ results.style.display = 'none'; return; }
+  results.style.display = 'block';
+
+  // ── Checks
+  var checks = [
+    { key:'pwd-c1', pass: pwd.length >= 12 },
+    { key:'pwd-c2', pass: pwd.length >= 16 },
+    { key:'pwd-c3', pass: /[A-Z]/.test(pwd) },
+    { key:'pwd-c4', pass: /[a-z]/.test(pwd) },
+    { key:'pwd-c5', pass: /[0-9]/.test(pwd) },
+    { key:'pwd-c6', pass: /[^A-Za-z0-9]/.test(pwd) },
+    { key:'pwd-c7', pass: !COMMON_PASSWORDS.some(function(c){ return pwd.toLowerCase().indexOf(c) >= 0; }) },
+    { key:'pwd-c8', pass: !KEYBOARD_WALKS.some(function(w){ return pwd.toLowerCase().indexOf(w) >= 0; }) },
+    { key:'pwd-c9', pass: !/(.)\1{2,}/.test(pwd) },
+    { key:'pwd-c10', pass: !/^\d+$/.test(pwd) && !/^[a-zA-Z]+$/.test(pwd) },
+    { key:'pwd-c11', pass: !/(.{1,4})\1{2,}/.test(pwd) },
+    { key:'pwd-c12', pass: pwd.length >= 8 && new Set(pwd.split('')).size >= Math.floor(pwd.length * 0.6) }
+  ];
+
+  var passed = checks.filter(function(c){ return c.pass; }).length;
+  var score = Math.round(passed / checks.length * 100);
+
+  // ── Entropy
+  var charsetSize = 0;
+  if(/[a-z]/.test(pwd)) charsetSize += 26;
+  if(/[A-Z]/.test(pwd)) charsetSize += 26;
+  if(/[0-9]/.test(pwd)) charsetSize += 10;
+  if(/[^A-Za-z0-9]/.test(pwd)) charsetSize += 32;
+  var entropy = charsetSize > 0 ? Math.round(Math.log2(charsetSize) * pwd.length) : 0;
+
+  // ── Score label
+  var scoreLabel, scoreColor;
+  if(score < 30){      scoreLabel = LANG==='ar'?'ضعيف جداً':'Very Weak';    scoreColor='#ff3c5a'; }
+  else if(score < 50){ scoreLabel = LANG==='ar'?'ضعيف':'Weak';              scoreColor='#ff7e3b'; }
+  else if(score < 70){ scoreLabel = LANG==='ar'?'متوسط':'Fair';             scoreColor='#ffd93d'; }
+  else if(score < 85){ scoreLabel = LANG==='ar'?'جيد':'Good';               scoreColor='#4cce8f'; }
+  else {               scoreLabel = LANG==='ar'?'قوي جداً':'Very Strong';   scoreColor='#00ff88'; }
+
+  // ── Bar
+  var bar = document.getElementById('pwdBarFill');
+  if(bar){ bar.style.width = score+'%'; bar.style.background = scoreColor; }
+
+  // ── Score row
+  var scoreLbl = document.getElementById('pwdScoreLbl');
+  var entropyEl = document.getElementById('pwdEntropy');
+  if(scoreLbl){ scoreLbl.textContent = scoreLabel; scoreLbl.style.color = scoreColor; }
+  if(entropyEl){ entropyEl.textContent = (LANG==='ar'?'أنتروبي':'Entropy')+': '+entropy+' bits'; }
+
+  // ── Checks grid
+  var CHECK_LABELS = {
+    'pwd-c1':  {en:'12+ characters',                       ar:'١٢ حرفاً أو أكثر'},
+    'pwd-c2':  {en:'16+ characters (recommended)',         ar:'١٦ حرفاً (موصى به)'},
+    'pwd-c3':  {en:'Contains uppercase letters',           ar:'يحتوي حروف كبيرة'},
+    'pwd-c4':  {en:'Contains lowercase letters',           ar:'يحتوي حروف صغيرة'},
+    'pwd-c5':  {en:'Contains numbers',                     ar:'يحتوي أرقام'},
+    'pwd-c6':  {en:'Contains special characters',          ar:'يحتوي رموز خاصة'},
+    'pwd-c7':  {en:'Not a common password',                ar:'ليس كلمة مرور شائعة'},
+    'pwd-c8':  {en:'No keyboard patterns (qwerty…)',       ar:'لا أنماط لوحة مفاتيح'},
+    'pwd-c9':  {en:'No repeated characters (aaa…)',        ar:'لا تكرار للحروف'},
+    'pwd-c10': {en:'Not letters-only or digits-only',      ar:'ليس حروف أو أرقام فقط'},
+    'pwd-c11': {en:'No repeated patterns (abcabc…)',       ar:'لا أنماط متكررة'},
+    'pwd-c12': {en:'High character diversity',             ar:'تنوع عالٍ في الأحرف'}
+  };
+
+  var grid = document.getElementById('pwdChecksGrid');
+  if(grid){
+    grid.innerHTML = '';
+    checks.forEach(function(c){
+      var lbl = CHECK_LABELS[c.key] ? (CHECK_LABELS[c.key][LANG]||CHECK_LABELS[c.key].en) : c.key;
+      var item = document.createElement('div');
+      item.className = 'pwd-check-item ' + (c.pass ? 'pci-pass' : 'pci-fail');
+      item.innerHTML = '<span class="pci-ico">'+(c.pass?'✓':'✗')+'</span><span class="pci-lbl">'+lbl+'</span>';
+      grid.appendChild(item);
+    });
+  }
+
+  // ── Best score
+  var best = parseInt(localStorage.getItem('shieldkw_best_score')||'0');
+  if(score > best){ localStorage.setItem('shieldkw_best_score', score); }
+}
+
+function generatePassword(){
+  var lower  = 'abcdefghijklmnopqrstuvwxyz';
+  var upper  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var digits = '0123456789';
+  var syms   = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+  var all    = lower + upper + digits + syms;
+  var length = 20;
+  var arr    = new Uint8Array(length + 10);
+  window.crypto.getRandomValues(arr);
+  var pwd = '';
+  // Ensure at least one of each category
+  var picks = [
+    lower[arr[0] % lower.length],
+    lower[arr[1] % lower.length],
+    upper[arr[2] % upper.length],
+    upper[arr[3] % upper.length],
+    digits[arr[4] % digits.length],
+    digits[arr[5] % digits.length],
+    syms[arr[6] % syms.length],
+    syms[arr[7] % syms.length]
+  ];
+  var extra = new Uint8Array(length - picks.length);
+  window.crypto.getRandomValues(extra);
+  for(var i=0;i<extra.length;i++) picks.push(all[extra[i] % all.length]);
+  // Fisher-Yates shuffle
+  var shuffleRnd = new Uint8Array(picks.length);
+  window.crypto.getRandomValues(shuffleRnd);
+  for(var j = picks.length - 1; j > 0; j--){
+    var k = shuffleRnd[j] % (j + 1);
+    var tmp = picks[j]; picks[j] = picks[k]; picks[k] = tmp;
+  }
+  pwd = picks.join('');
+  var inp = document.getElementById('pwdInput');
+  if(inp){ inp.value = pwd; inp.type = 'text'; }
+  var eyeBtn = document.getElementById('pwdEye');
+  if(eyeBtn) eyeBtn.textContent = '🙈';
+  checkPassword();
+}
+
+// ══════════════════════════════════════════
+// LINK SCANNER
+// ══════════════════════════════════════════
+var SUSPICIOUS_TLDS = ['.xyz','.top','.club','.info','.online','.site','.tech','.live','.click','.link','.work','.bid','.win','.loan','.download','.review','.country','.stream','.gdn','.accountant','.science','.date','.faith','.racing','.men','.trade'];
+var LEGIT_BRANDS = ['paypal','amazon','google','microsoft','apple','facebook','instagram','twitter','netflix','ebay','whatsapp','telegram','gov','moi','nbk','boubyan','burgan','ahli','gulf','kfh','cbk','sahel'];
+var URL_SHORTENERS = ['bit.ly','t.co','tinyurl.com','goo.gl','ow.ly','is.gd','buff.ly','adf.ly','tiny.cc','lnkd.in','fb.me','youtu.be','short.io','rb.gy'];
+var PHISHING_KEYWORDS = ['login','verify','secure','account','update','confirm','suspended','unlock','alert','warning','urgent','immediately','limited','expire','click','now','free','prize','winner','congratulations','bank','password','credential','signin','sign-in','webscr','ebayisapi'];
+
+function setLinkEx(urlOrEl){
+  var inp = document.getElementById('linkInput');
+  if(!inp) return;
+  if(typeof urlOrEl === 'string'){
+    inp.value = urlOrEl;
+  } else if(urlOrEl && urlOrEl.getAttribute){
+    inp.value = urlOrEl.getAttribute('data-url') || '';
+  }
+  clearLinkResults();
+}
+
+function clearLinkResults(){
+  var res = document.getElementById('linkResults');
+  if(res) res.style.display = 'none';
+}
+
+function scanLink(){
+  var inp = document.getElementById('linkInput');
+  var raw = inp ? inp.value.trim() : '';
+  var res = document.getElementById('linkResults');
+  if(!res) return;
+  if(!raw){ res.style.display='none'; return; }
+
+  var urlStr = raw;
+  if(!/^https?:\/\//i.test(urlStr)) urlStr = 'http://' + urlStr;
+
+  var parsed;
+  try { parsed = new URL(urlStr); } catch(e) {
+    res.style.display = 'block';
+    res.innerHTML = '<div class="lr-error">'+(LANG==='ar'?'عنوان URL غير صالح':'Invalid URL — please check the format')+'</div>';
+    return;
+  }
+
+  var hostname = parsed.hostname.toLowerCase();
+  var checks = [];
+  var riskScore = 0;
+
+  // 1. HTTPS
+  var isHttps = parsed.protocol === 'https:';
+  checks.push({ pass: isHttps, warn: false,
+    label: {en:'Uses HTTPS (encrypted connection)', ar:'يستخدم HTTPS (اتصال مشفر)'},
+    note:  isHttps ? {en:'Connection is encrypted',ar:'الاتصال مشفر'} : {en:'No encryption — data sent in plain text',ar:'لا تشفير — البيانات تُرسل كنص عادي'} });
+  if(!isHttps) riskScore += 20;
+
+  // 2. Suspicious TLD
+  var hasSusTLD = SUSPICIOUS_TLDS.some(function(tld){ return hostname.endsWith(tld); });
+  checks.push({ pass: !hasSusTLD, warn: hasSusTLD,
+    label: {en:'Domain extension (TLD)', ar:'امتداد النطاق (TLD)'},
+    note:  hasSusTLD ? {en:'High-risk TLD often used in phishing',ar:'امتداد عالي الخطورة كثيراً ما يُستخدم في التصيد'} : {en:'TLD appears normal',ar:'امتداد النطاق يبدو طبيعياً'} });
+  if(hasSusTLD) riskScore += 20;
+
+  // 3. IP address instead of domain
+  var isIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+  checks.push({ pass: !isIP, warn: isIP,
+    label: {en:'Domain vs IP address', ar:'النطاق مقابل عنوان IP'},
+    note:  isIP ? {en:'IP address used instead of domain — very suspicious',ar:'عنوان IP بدل النطاق — مشبوه جداً'} : {en:'Uses proper domain name',ar:'يستخدم اسم نطاق حقيقي'} });
+  if(isIP) riskScore += 25;
+
+  // 4. Brand lookalike
+  var parts = hostname.replace('www.','').split('.');
+  var mainDomain = parts.slice(0,-1).join('.');
+  var hasLookalike = LEGIT_BRANDS.some(function(brand){
+    return mainDomain.indexOf(brand) >= 0 && mainDomain !== brand;
+  });
+  checks.push({ pass: !hasLookalike, warn: hasLookalike,
+    label: {en:'Brand name in suspicious context', ar:'اسم علامة تجارية في سياق مشبوه'},
+    note:  hasLookalike ? {en:'Domain contains brand name but is not the official domain',ar:'النطاق يحتوي اسم علامة تجارية لكنه ليس النطاق الرسمي'} : {en:'No brand impersonation detected',ar:'لا يوجد انتحال لعلامة تجارية'} });
+  if(hasLookalike) riskScore += 20;
+
+  // 5. URL shortener
+  var isShortener = URL_SHORTENERS.some(function(s){ return hostname === s || hostname.endsWith('.'+s); });
+  checks.push({ pass: !isShortener, warn: isShortener,
+    label: {en:'URL shortener service', ar:'خدمة اختصار الروابط'},
+    note:  isShortener ? {en:'URL shortener hides the real destination',ar:'اختصار الرابط يخفي الوجهة الحقيقية'} : {en:'Not a URL shortener',ar:'ليس اختصار رابط'} });
+  if(isShortener) riskScore += 15;
+
+  // 6. Subdomain depth
+  var subDepth = hostname.split('.').length - 2;
+  var deepSub = subDepth >= 3;
+  checks.push({ pass: !deepSub, warn: deepSub,
+    label: {en:'Subdomain depth', ar:'عمق النطاق الفرعي'},
+    note:  deepSub ? {en:'Unusually deep subdomain structure',ar:'هيكل نطاق فرعي عميق بشكل غير معتاد'} : {en:'Normal subdomain depth',ar:'عمق نطاق فرعي طبيعي'} });
+  if(deepSub) riskScore += 10;
+
+  // 7. URL length
+  var urlLen = raw.length;
+  var longUrl = urlLen > 100;
+  checks.push({ pass: !longUrl, warn: longUrl,
+    label: {en:'URL length ('+urlLen+' chars)', ar:'طول الرابط ('+urlLen+' حرف)'},
+    note:  longUrl ? {en:'Unusually long URL can hide malicious content',ar:'رابط طويل بشكل غير معتاد قد يخفي محتوى خبيثاً'} : {en:'URL length is normal',ar:'طول الرابط طبيعي'} });
+  if(longUrl) riskScore += 10;
+
+  // 8. Phishing keywords in path/query
+  var pathQuery = (parsed.pathname + parsed.search).toLowerCase();
+  var hasPhishKw = PHISHING_KEYWORDS.some(function(kw){ return pathQuery.indexOf(kw) >= 0 || hostname.indexOf(kw) >= 0; });
+  checks.push({ pass: !hasPhishKw, warn: hasPhishKw,
+    label: {en:'Phishing keywords in URL', ar:'كلمات التصيد في الرابط'},
+    note:  hasPhishKw ? {en:'URL contains common phishing keywords',ar:'الرابط يحتوي كلمات تصيد شائعة'} : {en:'No phishing keywords detected',ar:'لا كلمات تصيد مكتشفة'} });
+  if(hasPhishKw) riskScore += 15;
+
+  // 9. Punycode / IDN
+  var hasPuny = hostname.indexOf('xn--') >= 0;
+  checks.push({ pass: !hasPuny, warn: hasPuny,
+    label: {en:'Punycode / IDN homograph', ar:'Punycode / انتحال أحرف'},
+    note:  hasPuny ? {en:'Domain uses punycode which can mimic real domains',ar:'النطاق يستخدم punycode قد ينتحل نطاقات حقيقية'} : {en:'No punycode detected',ar:'لا يوجد punycode'} });
+  if(hasPuny) riskScore += 20;
+
+  // 10. Kuwait gov fake pattern
+  var kwGovFake = /kw|kuwait|gov|moi|cbk|mof/.test(hostname) && !hostname.endsWith('.gov.kw') && !hostname.endsWith('.edu.kw') && !hostname.endsWith('.com.kw') && !hostname.endsWith('.net.kw') && !hostname.endsWith('.org.kw');
+  checks.push({ pass: !kwGovFake, warn: kwGovFake,
+    label: {en:'Kuwait government impersonation', ar:'انتحال جهة حكومية كويتية'},
+    note:  kwGovFake ? {en:'Domain mimics Kuwait government but lacks .gov.kw',ar:'النطاق ينتحل جهة حكومية كويتية لكن ينقصه .gov.kw'} : {en:'No Kuwait gov impersonation',ar:'لا انتحال حكومي كويتي'} });
+  if(kwGovFake) riskScore += 30;
+
+  riskScore = Math.min(riskScore, 100);
+
+  // ── Verdict
+  var verdict, verdictClass, verdictIco;
+  if(riskScore === 0){
+    verdict = {en:'Appears Safe', ar:'يبدو آمناً'};
+    verdictClass = 'lv-safe'; verdictIco = '✅';
+  } else if(riskScore < 40){
+    verdict = {en:'Low Risk — Proceed with Caution', ar:'خطر منخفض — تابع بحذر'};
+    verdictClass = 'lv-warn'; verdictIco = '⚠️';
+  } else if(riskScore < 70){
+    verdict = {en:'Medium Risk — Be Careful', ar:'خطر متوسط — كن حذراً'};
+    verdictClass = 'lv-warn'; verdictIco = '⚠️';
+  } else {
+    verdict = {en:'High Risk — Likely Phishing', ar:'خطر عالٍ — تصيد محتمل'};
+    verdictClass = 'lv-danger'; verdictIco = '🚨';
+  }
+
+  var checksHTML = checks.map(function(c){
+    var cls = c.pass ? 'lr-pass' : (c.warn ? 'lr-warn' : 'lr-fail');
+    var ico = c.pass ? '✓' : (c.warn ? '!' : '✗');
+    return '<div class="lr-check-item '+cls+'">'+
+      '<span class="lrc-ico">'+ico+'</span>'+
+      '<div>'+
+        '<div class="lrc-label">'+rt(c.label)+'</div>'+
+        '<div class="lrc-note">'+rt(c.note)+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  res.style.display = 'block';
+  res.innerHTML =
+    '<div class="lr-verdict '+verdictClass+'">'+
+      '<span class="lrv-ico">'+verdictIco+'</span>'+
+      '<div class="lrv-body">'+
+        '<div class="lrv-label">'+rt(verdict)+'</div>'+
+        '<div class="lrv-domain">'+hostname+'</div>'+
+        '<div class="lrv-score">'+(LANG==='ar'?'درجة الخطر':'Risk Score')+': '+riskScore+'/100</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="lr-checks">'+checksHTML+'</div>';
+}
+
+// ══════════════════════════════════════════
+// SECURITY CHECKLIST
+// ══════════════════════════════════════════
+var CSL_DATA = [
+  {
+    cat: {en:'Account Security', ar:'أمان الحسابات'},
+    ico: '🔑',
+    items: [
+      {en:'Use a unique password for each account',ar:'استخدم كلمة مرور فريدة لكل حساب'},
+      {en:'Enable two-factor authentication (2FA) on all important accounts',ar:'فعّل التحقق بخطوتين على جميع الحسابات المهمة'},
+      {en:'Use a password manager',ar:'استخدم مدير كلمات مرور'},
+      {en:'Review active sessions and connected apps regularly',ar:'راجع الجلسات النشطة والتطبيقات المرتبطة بانتظام'},
+      {en:'Change passwords for compromised accounts immediately',ar:'غيّر كلمات مرور الحسابات المخترقة فوراً'}
+    ]
+  },
+  {
+    cat: {en:'Device Protection', ar:'حماية الأجهزة'},
+    ico: '💻',
+    items: [
+      {en:'Keep operating system and apps updated',ar:'حافظ على تحديث نظام التشغيل والتطبيقات'},
+      {en:'Install reputable antivirus software',ar:'ثبّت برنامج حماية من الفيروسات موثوق'},
+      {en:'Enable device screen lock with strong PIN/biometrics',ar:'فعّل قفل الشاشة برمز قوي أو بصمة'},
+      {en:'Enable full-disk encryption',ar:'فعّل تشفير القرص الكامل'},
+      {en:'Do not install apps from unknown sources',ar:'لا تثبت تطبيقات من مصادر غير معروفة'}
+    ]
+  },
+  {
+    cat: {en:'Phishing & Scams', ar:'التصيد والاحتيال'},
+    ico: '🎣',
+    items: [
+      {en:'Verify sender before clicking any link',ar:'تحقق من المرسل قبل النقر على أي رابط'},
+      {en:'Check URLs end with .gov.kw for Kuwait government sites',ar:'تأكد أن روابط الجهات الحكومية الكويتية تنتهي بـ .gov.kw'},
+      {en:'Never share OTP or password over phone/SMS',ar:'لا تشارك OTP أو كلمة المرور عبر الهاتف أو SMS'},
+      {en:'Verify urgent money requests by calling directly',ar:'تحقق من طلبات المال العاجلة بالاتصال مباشرة'},
+      {en:'Report suspicious messages to CITRA (24825252)',ar:'أبلغ عن الرسائل المشبوهة لـ CITRA (24825252)'}
+    ]
+  },
+  {
+    cat: {en:'Network & Privacy', ar:'الشبكة والخصوصية'},
+    ico: '🌐',
+    items: [
+      {en:'Use secure Wi-Fi (WPA3/WPA2) with strong password',ar:'استخدم Wi-Fi آمن (WPA3/WPA2) بكلمة مرور قوية'},
+      {en:'Avoid entering sensitive data on public Wi-Fi',ar:'تجنب إدخال بيانات حساسة على Wi-Fi العام'},
+      {en:'Review app permissions — camera, location, contacts',ar:'راجع صلاحيات التطبيقات — الكاميرا والموقع وجهات الاتصال'},
+      {en:'Use a VPN when on untrusted networks',ar:'استخدم VPN على الشبكات غير الموثوقة'},
+      {en:'Check for unknown devices on your home network',ar:'تحقق من الأجهزة غير المعروفة على شبكتك المنزلية'}
+    ]
+  },
+  {
+    cat: {en:'Data & Backup', ar:'البيانات والنسخ الاحتياطي'},
+    ico: '💾',
+    items: [
+      {en:'Back up important data regularly (3-2-1 rule)',ar:'انسخ البيانات المهمة بانتظام (قاعدة 3-2-1)'},
+      {en:'Store backups in an encrypted location',ar:'احفظ النسخ الاحتياطية في مكان مشفر'},
+      {en:'Delete old accounts you no longer use',ar:'احذف الحسابات القديمة التي لم تعد تستخدمها'},
+      {en:'Minimize personal data shared online',ar:'قلل البيانات الشخصية المشاركة عبر الإنترنت'},
+      {en:'Shred physical documents with sensitive info',ar:'مزّق المستندات الورقية ذات المعلومات الحساسة'}
+    ]
+  }
+];
+
+function buildChecklist(){
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('shieldkw_csl')||'{}'); } catch(e){}
+  var container = document.getElementById('cslSections');
+  if(!container) return;
+  container.innerHTML = '';
+  CSL_DATA.forEach(function(section, si){
+    var catDiv = document.createElement('div');
+    catDiv.className = 'csl-cat';
+    var hdr = document.createElement('div');
+    hdr.className = 'csl-cat-hdr';
+    hdr.innerHTML = '<span>'+section.ico+' '+rt(section.cat)+'</span>';
+    catDiv.appendChild(hdr);
+    var itemsDiv = document.createElement('div');
+    itemsDiv.className = 'csl-items';
+    section.items.forEach(function(item, ii){
+      var key = si+'-'+ii;
+      var isDone = !!saved[key];
+      var itemDiv = document.createElement('div');
+      itemDiv.className = 'csl-item' + (isDone?' csl-checked':'');
+      itemDiv.setAttribute('data-key', key);
+      itemDiv.innerHTML =
+        '<button class="csl-checkbox '+(isDone?'csb-on':'') +'" onclick="toggleCheck(\''+key+'\',this.closest(\'.csl-item\'),this)" aria-label="toggle">'+
+          (isDone?'✓':'')+'</button>'+
+        '<span class="csl-item-txt">'+rt(item)+'</span>';
+      itemsDiv.appendChild(itemDiv);
+    });
+    catDiv.appendChild(itemsDiv);
+    container.appendChild(catDiv);
+  });
+  updateCslRing();
+}
+
+function toggleCheck(key, itemEl, btnEl){
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('shieldkw_csl')||'{}'); } catch(e){}
+  if(saved[key]){
+    delete saved[key];
+    itemEl.classList.remove('csl-checked');
+    btnEl.classList.remove('csb-on');
+    btnEl.textContent = '';
+  } else {
+    saved[key] = 1;
+    itemEl.classList.add('csl-checked');
+    btnEl.classList.add('csb-on');
+    btnEl.textContent = '✓';
+  }
+  localStorage.setItem('shieldkw_csl', JSON.stringify(saved));
+  updateCslRing();
+}
+
+function updateCslRing(){
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('shieldkw_csl')||'{}'); } catch(e){}
+  var total = 0;
+  CSL_DATA.forEach(function(s){ total += s.items.length; });
+  var done = Object.keys(saved).length;
+  var pct = total > 0 ? Math.round(done/total*100) : 0;
+  var circumference = 314.16; // 2*pi*50
+  var arc = document.getElementById('cslArc');
+  if(arc) arc.style.strokeDashoffset = circumference - (circumference * pct / 100);
+  var pctEl = document.getElementById('cslPct');
+  if(pctEl) pctEl.textContent = pct+'%';
+  var countEl = document.getElementById('cslCount');
+  if(countEl) countEl.textContent = done+' / '+total+' '+(LANG==='ar'?'مكتمل':'completed');
+  var ringLbl = document.getElementById('cslRingLbl');
+  if(ringLbl){
+    if(pct === 0)       ringLbl.textContent = LANG==='ar'?'لم يبدأ':'Not Started';
+    else if(pct < 50)   ringLbl.textContent = LANG==='ar'?'في البداية':'In Progress';
+    else if(pct < 100)  ringLbl.textContent = LANG==='ar'?'جيد':'Good Progress';
+    else                ringLbl.textContent = LANG==='ar'?'مكتمل ✓':'Complete ✓';
+  }
+}
+
+function resetChecklist(){
+  localStorage.removeItem('shieldkw_csl');
+  buildChecklist();
+}
+
+// ══════════════════════════════════════════
+// WEEK COMPARISON
+// ══════════════════════════════════════════
+function renderWeekComparison(){
+  var row = document.getElementById('statsWeekRow');
+  if(!row) return;
+  var now = new Date();
+  var weekAgo = new Date(now); weekAgo.setDate(now.getDate()-7);
+  var twoWeeksAgo = new Date(now); twoWeeksAgo.setDate(now.getDate()-14);
+
+  function inRange(r, from, to){
+    if(!r.ts) return false;
+    var d = new Date(r.ts);
+    return d >= from && d < to;
+  }
+
+  var thisWeek  = reports.filter(function(r){ return inRange(r, weekAgo, now); });
+  var lastWeek  = reports.filter(function(r){ return inRange(r, twoWeeksAgo, weekAgo); });
+
+  var SEVS = ['Critical','High','Medium','Low'];
+  var SEV_COLORS = {Critical:'#ff3c5a',High:'#ff7e3b',Medium:'#ffd93d',Low:'#4cce8f'};
+
+  function countSev(arr, sev){ return arr.filter(function(r){return r.sev===sev;}).length; }
+
+  var delta = thisWeek.length - lastWeek.length;
+  var deltaStr = delta > 0 ? '+'+delta : (delta < 0 ? ''+delta : '0');
+  var deltaColor = delta > 0 ? '#ff3c5a' : (delta < 0 ? '#4cce8f' : '#6b7280');
+
+  var sevGrid = SEVS.map(function(s){
+    var tw = countSev(thisWeek, s);
+    var lw = countSev(lastWeek, s);
+    var d = tw - lw;
+    var dStr = d > 0 ? '+'+d : ''+d;
+    var dCol = d > 0 ? '#ff3c5a' : (d < 0 ? '#4cce8f' : '#6b7280');
+    return '<div class="swc-sev-item">'+
+      '<span class="swc-sev-name" style="color:'+SEV_COLORS[s]+'">'+s+'</span>'+
+      '<div class="swc-sev-nums">'+
+        '<span style="color:var(--text);font-weight:600;">'+tw+'</span>'+
+        '<span class="swc-lw-num">'+lw+'</span>'+
+        '<span style="color:'+dCol+';font-size:0.7rem;">'+dStr+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  row.innerHTML =
+    '<div class="swc-card">'+
+      '<div class="swc-hdr">'+(LANG==='ar'?'هذا الأسبوع مقابل الأسبوع الماضي':'This Week vs Last Week')+'</div>'+
+      '<div class="swc-main">'+
+        '<div class="swc-total">'+
+          '<div style="font-size:2rem;font-weight:700;color:var(--accent);">'+thisWeek.length+'</div>'+
+          '<div class="swc-tw">'+(LANG==='ar'?'هذا الأسبوع':'This Week')+'</div>'+
+          '<div class="swc-delta" style="color:'+deltaColor+';">'+deltaStr+'</div>'+
+        '</div>'+
+        '<div class="swc-sep"></div>'+
+        '<div class="swc-total">'+
+          '<div style="font-size:2rem;font-weight:700;color:var(--muted2);">'+lastWeek.length+'</div>'+
+          '<div class="swc-lw">'+(LANG==='ar'?'الأسبوع الماضي':'Last Week')+'</div>'+
+          '<div class="swc-total-lbl">'+(LANG==='ar'?'حوادث':'incidents')+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="swc-sev-grid">'+sevGrid+'</div>'+
+    '</div>';
+}
+
+// ══════════════════════════════════════════
+// KB READING TRACKER
+// ══════════════════════════════════════════
+function toggleKbRead(idx, btnEl){
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('shieldkw_kb_read')||'{}'); } catch(e){}
+  var key = 'kb_'+idx;
+  if(saved[key]){
+    delete saved[key];
+    if(btnEl){ btnEl.classList.remove('krb-done'); btnEl.textContent = LANG==='ar'?'تعلّمت هذا':'Mark as Read'; }
+  } else {
+    saved[key] = 1;
+    if(btnEl){ btnEl.classList.add('krb-done'); btnEl.textContent = LANG==='ar'?'✓ قرأت':'✓ Read'; }
+  }
+  localStorage.setItem('shieldkw_kb_read', JSON.stringify(saved));
+  updateKbProgress();
+}
+
+function updateKbProgress(){
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('shieldkw_kb_read')||'{}'); } catch(e){}
+  var done = Object.keys(saved).length;
+  var total = KB_ITEMS ? KB_ITEMS.length : 0;
+  var prog = document.getElementById('kbProgress');
+  if(!prog) return;
+  var pct = total > 0 ? Math.round(done/total*100) : 0;
+  prog.innerHTML =
+    '<div class="kb-prog-bar-wrap">'+
+      '<div class="kb-prog-label">'+(LANG==='ar'?'تقدم القراءة: '+done+'/'+total+' ('+pct+'%)':'Reading Progress: '+done+'/'+total+' ('+pct+'%)')+'</div>'+
+      '<div class="kb-prog-track"><div class="kb-prog-fill" style="width:'+pct+'%;background:var(--accent);height:4px;border-radius:2px;transition:width 0.5s;"></div></div>'+
+    '</div>';
+}
+
+// ══════════════════════════════════════════
+// SCAM DETECTOR — SHARE RESULT
+// ══════════════════════════════════════════
+function shareResult(){
+  var header = document.getElementById('resultHeader');
+  var signals = document.getElementById('resultSignals');
+  if(!header) return;
+  var text = 'ShieldKW Scam Analysis\n'+
+    '========================\n'+
+    header.textContent + '\n\n';
+  if(signals){
+    signals.querySelectorAll('.signal-item').forEach(function(s){
+      text += '• ' + s.textContent + '\n';
+    });
+  }
+  text += '\n— شيلد الكويت | ShieldKW Threat Intelligence';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      showToast(LANG==='ar'?'تم نسخ النتيجة':'Result copied to clipboard');
+    }).catch(function(){
+      prompt(LANG==='ar'?'انسخ النتيجة:':'Copy the result:', text);
+    });
+  } else {
+    prompt(LANG==='ar'?'انسخ النتيجة:':'Copy the result:', text);
+  }
+}
+
 function init(){
   initMap();
   renderList();
   renderSidebarStats();
   renderStats(true);
+  renderWeekComparison();
   loadScenario();
   buildKB();
+  updateKbProgress();
   applyLang();
   // Animate counters on first load
   setTimeout(animateAllCounters, 200);
