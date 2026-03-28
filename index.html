@@ -6,6 +6,10 @@
 <title>ShieldKW — Kuwait Cybersecurity Awareness Platform</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -62,8 +66,18 @@
     <span class="tab-ico">📊</span>
     <span class="tab-lbl" data-i18n="tab-stats">Statistics</span>
   </div>
-  <div class="tab" onclick="switchTab('about',this)">
+  <div class="tab" onclick="switchTab('pwd',this)">
     <span class="tab-num">06</span>
+    <span class="tab-ico">🔐</span>
+    <span class="tab-lbl" data-i18n="tab-pwd">Password Check</span>
+  </div>
+  <div class="tab" onclick="switchTab('link',this)">
+    <span class="tab-num">07</span>
+    <span class="tab-ico">🔗</span>
+    <span class="tab-lbl" data-i18n="tab-link">Link Scanner</span>
+  </div>
+  <div class="tab" onclick="switchTab('about',this)">
+    <span class="tab-num">08</span>
     <span class="tab-ico">ℹ️</span>
     <span class="tab-lbl" data-i18n="tab-about">About</span>
   </div>
@@ -74,7 +88,20 @@
 
   <!-- ══ PAGE: MAP ══ -->
   <div class="page active" id="page-map">
-    <div class="layout">
+    <div class="map-ctrl-bar">
+      <div class="mcb-group">
+        <button class="mcb-btn mcb-active" id="mctMarkers" onclick="setMapMode('markers',this)">📍 Markers</button>
+        <button class="mcb-btn" id="mctHeat" onclick="setMapMode('heat',this)">🔥 Heatmap</button>
+      </div>
+      <div class="mcb-sep"></div>
+      <div class="mcb-group mcb-timeline">
+        <span class="mcb-tl-lbl">Timeline:</span>
+        <button class="mcb-tl-btn" onclick="setTimeline(7,this)">7d</button>
+        <button class="mcb-tl-btn" onclick="setTimeline(30,this)">30d</button>
+        <button class="mcb-tl-btn mcb-tl-active" onclick="setTimeline(0,this)">All</button>
+      </div>
+    </div>
+    <div class="layout" style="position:relative;">
       <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
       <aside class="sidebar" id="sidebar">
 
@@ -212,6 +239,9 @@
         </div>
         <div class="result-signals" id="resultSignals"></div>
         <div class="ai-actions-wrap" id="aiActions"></div>
+        <div style="text-align:center;margin-top:12px;">
+          <button class="mcb-btn" style="font-size:0.8rem;padding:8px 20px;" onclick="shareResult()">📋 <span data-i18n="share-result">Copy Result</span></button>
+        </div>
       </div>
 
     </div>
@@ -290,6 +320,9 @@
         </div>
       </div>
 
+      <!-- KB PROGRESS -->
+      <div id="kbProgress" class="kb-progress"></div>
+
       <!-- SEARCH -->
       <div class="kb-search-wrap">
         <span class="kb-search-icon">🔍</span>
@@ -339,6 +372,9 @@
         <span class="stats-last-update">🕐 <span id="st-lastupdate">—</span></span>
         <button class="stats-refresh-btn" onclick="renderStats(true)" data-i18n="refresh-now">↻ Refresh Now</button>
       </div>
+
+      <!-- WEEK COMPARISON -->
+      <div class="stats-week-row" id="statsWeekRow"></div>
 
       <!-- CHARTS -->
       <div class="charts-grid">
@@ -479,6 +515,69 @@
 
     </div>
   </div>
+
+  <!-- ══ PAGE: PASSWORD CHECKER ══ -->
+  <div class="page" id="page-pwd">
+    <div class="pwd-page">
+      <div class="pwd-hero">
+        <div class="tool-pretag">// PASSWORD CHECKER</div>
+        <h2 class="tool-h2" data-i18n="pwd-title">Password Strength Checker</h2>
+        <p class="tool-sub" data-i18n="pwd-sub">100% client-side — your password is never transmitted or stored.</p>
+      </div>
+
+      <div class="pwd-main">
+        <div class="pwd-input-card">
+          <div class="pwd-field-wrap">
+            <input type="password" id="pwdInput" class="pwd-input" placeholder="Type your password..." oninput="checkPassword()" autocomplete="new-password" spellcheck="false">
+            <button class="pwd-eye" id="pwdEye" onclick="togglePwdVis()" title="Show/hide">👁</button>
+          </div>
+          <div class="pwd-bar-wrap">
+            <div class="pwd-bar-track">
+              <div class="pwd-bar-fill" id="pwdBarFill"></div>
+            </div>
+          </div>
+          <div class="pwd-score-row">
+            <span class="pwd-score-lbl" id="pwdScoreLbl">Enter a password to check</span>
+            <span class="pwd-entropy" id="pwdEntropy"></span>
+          </div>
+          <button class="pwd-gen-btn" onclick="generatePassword()" data-i18n="pwd-gen">⚡ Generate Strong Password</button>
+        </div>
+
+        <div class="pwd-results" id="pwdResults" style="display:none">
+          <div class="pwd-checks-grid" id="pwdChecksGrid"></div>
+          <div class="pwd-tips-card" id="pwdTipsCard"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: LINK SCANNER ══ -->
+  <div class="page" id="page-link">
+    <div class="link-page">
+      <div class="link-hero">
+        <div class="tool-pretag">// LINK SCANNER</div>
+        <h2 class="tool-h2" data-i18n="link-title">Link &amp; URL Scanner</h2>
+        <p class="tool-sub" data-i18n="link-sub">Paste any URL to detect phishing, suspicious domains, and redirect tricks.</p>
+      </div>
+
+      <div class="link-main">
+        <div class="link-input-card">
+          <div class="link-field-row">
+            <input type="text" id="linkInput" class="link-input" placeholder="https://example.com/path?query=value" oninput="clearLinkResults()" autocomplete="off" spellcheck="false">
+            <button class="link-scan-btn" onclick="scanLink()" data-i18n="link-scan">Scan →</button>
+          </div>
+          <div class="link-examples">
+            <span class="link-ex-lbl">Try:</span>
+            <span class="link-ex-item" onclick="setLinkEx(this)" data-url="http://g00gle-secure.xyz/login?redirect=gmail">Lookalike domain</span>
+            <span class="link-ex-item" onclick="setLinkEx(this)" data-url="https://knet.com.kw/payment">Legitimate URL</span>
+            <span class="link-ex-item" onclick="setLinkEx(this)" data-url="http://192.168.1.1/banking/verify">IP address</span>
+          </div>
+        </div>
+        <div id="linkResults" class="link-results" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
 
 </div><!-- /main -->
 
