@@ -6592,17 +6592,14 @@ var DICT_WORDS = ['welcome', 'password', 'monkey', 'dragon', 'master', 'sunshine
 
 function togglePwdVis() {
     var inp = document.getElementById('pwdInput');
-    var btn = document.getElementById('pwdEye');
-    if (!inp)
-        return;
+    var lbl = document.getElementById('pcToggleLbl');
+    if (!inp) return;
     if (inp.type === 'password') {
         inp.type = 'text';
-        if (btn)
-            btn.textContent = '🙈';
+        if (lbl) lbl.textContent = 'HIDE';
     } else {
         inp.type = 'password';
-        if (btn)
-            btn.textContent = '👁';
+        if (lbl) lbl.textContent = 'SHOW';
     }
 }
 
@@ -6645,11 +6642,18 @@ async function checkPassword() {
     if (!results)
         return;
 
+    var emptyState = document.getElementById('pcEmpty');
+    var verdictRow = document.getElementById('pcVerdictRow');
     if (!pwd) {
         results.style.display = 'none';
+        if (emptyState) emptyState.style.display = '';
+        if (verdictRow) verdictRow.style.display = 'none';
+        for (var si = 0; si < 5; si++) { var s = document.getElementById('pcSeg' + si); if (s) s.style.background = ''; }
         return;
     }
-    results.style.display = 'block';
+    results.style.display = 'flex';
+    if (emptyState) emptyState.style.display = 'none';
+    if (verdictRow) verdictRow.style.display = '';
 
     var pwdLower = pwd.toLowerCase();
     var pwdStripped = pwdLower.replace(/[^a-z]/g, '');
@@ -6887,151 +6891,92 @@ async function checkPassword() {
         };
     }
 
-    // ── Render without HIBP result first
+    // ── Render v3 UI
     function renderUI(hibpCount) {
-        // If HIBP found breaches, force Very Weak
         var finalScore = score;
         var displayCrackTime = crackTime;
         if (hibpCount !== null && hibpCount > 0) {
             finalScore = 0;
-            displayCrackTime = '\u26A0\uFE0F ' + (LANG === 'ar' ? 'مخترق بالفعل \u2014 وُجد في ' + hibpCount.toLocaleString() + ' تسريب' : 'Already compromised \u2014 found in ' + hibpCount.toLocaleString() + ' breaches');
-        } else if (isCommon)
-            finalScore = 0;
+            displayCrackTime = '⚠️ Found in ' + hibpCount.toLocaleString() + ' breaches';
+        } else if (isCommon) finalScore = 0;
 
         var sl = getScoreLabel(finalScore);
 
-        var bar = document.getElementById('pwdBarFill');
-        if (bar) {
-            bar.style.width = finalScore + '%';
-            bar.style.background = sl.color;
+        // ── 5-segment bar
+        var segs = finalScore < 20 ? 1 : finalScore < 40 ? 2 : finalScore < 60 ? 3 : finalScore < 80 ? 4 : 5;
+        for (var si = 0; si < 5; si++) {
+            var seg = document.getElementById('pcSeg' + si);
+            if (seg) seg.style.background = si < segs ? sl.color : '';
         }
 
-        var scoreLbl = document.getElementById('pwdScoreLbl');
-        var entropyEl = document.getElementById('pwdEntropy');
-        if (scoreLbl) {
-            scoreLbl.textContent = sl.label;
-            scoreLbl.style.color = sl.color;
-        }
-        if (entropyEl) {
-            entropyEl.textContent = (LANG === 'ar' ? 'أنتروبي' : 'Entropy') + ': ' + entropy + ' bits (' + (LANG === 'ar' ? 'فعّال' : 'effective') + ': ' + effectiveEntropy + ' bits)' + '  \u00B7  ' + (LANG === 'ar' ? 'وقت الكسر' : 'Crack time') + ': ' + displayCrackTime;
-        }
+        // ── Verdict + score
+        var vEl = document.getElementById('pcVerdict');
+        var sEl = document.getElementById('pcScore');
+        if (vEl) { vEl.textContent = sl.label; vEl.style.color = sl.color; }
+        if (sEl) { sEl.textContent = finalScore + '/100'; sEl.style.color = sl.color; }
 
-        var CHECK_LABELS = {
-            'pwd-c1': {
-                en: '12+ characters',
-                ar: '١٢ حرفاً أو أكثر'
-            },
-            'pwd-c2': {
-                en: '16+ characters (recommended)',
-                ar: '١٦ حرفاً (موصى به)'
-            },
-            'pwd-c3': {
-                en: 'Contains uppercase letters',
-                ar: 'يحتوي حروف كبيرة'
-            },
-            'pwd-c4': {
-                en: 'Contains lowercase letters',
-                ar: 'يحتوي حروف صغيرة'
-            },
-            'pwd-c5': {
-                en: 'Contains numbers',
-                ar: 'يحتوي أرقام'
-            },
-            'pwd-c6': {
-                en: 'Contains special characters',
-                ar: 'يحتوي رموز خاصة'
-            },
-            'pwd-c7': {
-                en: 'Not a common password',
-                ar: 'ليس كلمة مرور شائعة'
-            },
-            'pwd-c8': {
-                en: 'No keyboard patterns (qwerty…)',
-                ar: 'لا أنماط لوحة مفاتيح'
-            },
-            'pwd-c9': {
-                en: 'No repeated characters (aaa…)',
-                ar: 'لا تكرار للحروف'
-            },
-            'pwd-c10': {
-                en: 'Not letters-only or digits-only',
-                ar: 'ليس حروف أو أرقام فقط'
-            },
-            'pwd-c11': {
-                en: 'No repeated patterns (abcabc…)',
-                ar: 'لا أنماط متكررة'
-            },
-            'pwd-c12': {
-                en: 'High character diversity',
-                ar: 'تنوع عالٍ في الأحرف'
-            },
-            'pwd-c13': {
-                en: 'Not found in known data breaches',
-                ar: 'غير مسرّب في اختراقات بيانات معروفة'
+        // ── Stats
+        var ct = document.getElementById('pwd2CrackTime'); if (ct) ct.textContent = displayCrackTime;
+        var ee = document.getElementById('pwd2Entropy'); if (ee) ee.textContent = effectiveEntropy + ' bits';
+        var ll = document.getElementById('pwd2Length'); if (ll) ll.textContent = pwd.length;
+
+        // ── Composition (safe - no actual chars shown)
+        var comp = document.getElementById('pcComposition');
+        if (comp) {
+            var nUp = 0, nLo = 0, nDig = 0, nSym = 0;
+            for (var ci = 0; ci < pwd.length; ci++) {
+                var ch = pwd[ci];
+                if (/[A-Z]/.test(ch)) nUp++;
+                else if (/[a-z]/.test(ch)) nLo++;
+                else if (/[0-9]/.test(ch)) nDig++;
+                else nSym++;
             }
+            var parts = [];
+            if (nUp) parts.push(nUp + ' upper');
+            if (nLo) parts.push(nLo + ' lower');
+            if (nDig) parts.push(nDig + ' digit');
+            if (nSym) parts.push(nSym + ' symbol');
+            comp.textContent = parts.join(' · ') || '—';
+        }
+
+        // ── Checks
+        var CL = {
+            'pwd-c1':'12+ characters','pwd-c2':'16+ chars (ideal)',
+            'pwd-c3':'Uppercase letters','pwd-c4':'Lowercase letters',
+            'pwd-c5':'Numbers','pwd-c6':'Symbols (!@#…)',
+            'pwd-c7':'Not common','pwd-c8':'No keyboard walks',
+            'pwd-c9':'No repeated chars','pwd-c10':'Mixed types',
+            'pwd-c11':'No patterns','pwd-c12':'High diversity',
+            'pwd-c13':'Not in breaches'
         };
+        var dc = checks.slice(0, 12);
+        var hc;
+        if (hibpCount === null) hc = { key:'pwd-c13', pass:null, hibpNA:true };
+        else if (hibpCount === 0) hc = { key:'pwd-c13', pass:true };
+        else hc = { key:'pwd-c13', pass:false, hibpCount:hibpCount };
+        dc.push(hc);
 
-        // Build checks list with HIBP result
-        var displayChecks = checks.slice(0, 12);
-        var hibpCheck;
-        if (hibpCount === null) {
-            hibpCheck = {
-                key: 'pwd-c13',
-                pass: null,
-                hibpPending: false,
-                hibpNA: true
-            };
-        } else if (hibpCount === 0) {
-            hibpCheck = {
-                key: 'pwd-c13',
-                pass: true,
-                hibpCount: 0
-            };
-        } else {
-            hibpCheck = {
-                key: 'pwd-c13',
-                pass: false,
-                hibpCount: hibpCount
-            };
-        }
-        displayChecks.push(hibpCheck);
-
-        var grid = document.getElementById('pwdChecksGrid');
-        if (grid) {
-            grid.innerHTML = '';
-            displayChecks.forEach(function(c) {
-                var lbl = CHECK_LABELS[c.key] ? (CHECK_LABELS[c.key][LANG] || CHECK_LABELS[c.key].en) : c.key;
-                // Special label for HIBP
+        var el = document.getElementById('pcChecks');
+        if (el) {
+            el.innerHTML = dc.map(function(c) {
+                var lbl = CL[c.key] || c.key;
                 if (c.key === 'pwd-c13') {
-                    if (c.hibpNA) {
-                        lbl = (LANG === 'ar') ? 'التحقق من قواعد البيانات المسرّبة: غير متاح' : 'Breach DB check: unavailable';
-                    } else if (c.pass === true) {
-                        lbl = (LANG === 'ar') ? '✓ غير مسرّب في اختراقات بيانات معروفة' : '✓ Not found in known breaches';
-                    } else if (c.pass === false) {
-                        lbl = (LANG === 'ar') ? '✗ مسرّب! وُجد في ' + c.hibpCount.toLocaleString() + ' اختراق معروف' : '✗ Found in ' + c.hibpCount.toLocaleString() + ' known breaches!';
-                    }
+                    if (c.hibpNA) lbl = 'Breach check unavailable';
+                    else if (c.pass === false) lbl = 'In ' + c.hibpCount.toLocaleString() + ' breaches!';
                 }
-                var item = document.createElement('div');
-                var cls = c.pass === true ? 'pci-pass' : c.pass === false ? 'pci-fail' : 'pci-neutral';
-                item.className = 'pwd-check-item ' + cls;
-                var ico = c.pass === true ? '✓' : c.pass === false ? '✗' : '⏳';
-                item.innerHTML = '<span class="pci-ico">' + ico + '</span><span class="pci-lbl">' + lbl + '</span>';
-                grid.appendChild(item);
-            });
+                var cls = c.pass === true ? 'pc-ck-pass' : c.pass === false ? 'pc-ck-fail' : 'pc-ck-wait';
+                var ico = c.pass === true ? '✓' : c.pass === false ? '✗' : '·';
+                return '<span class="pc-ck ' + cls + '"><span class="pc-ck-i">' + ico + '</span>' + lbl + '</span>';
+            }).join('');
         }
 
-        // ── Best score
         var best = parseInt(localStorage.getItem('shieldkw_best_score') || '0');
-        if (finalScore > best) {
-            localStorage.setItem('shieldkw_best_score', finalScore);
-        }
+        if (finalScore > best) localStorage.setItem('shieldkw_best_score', finalScore);
     }
 
     // ── Show immediately with "Checking..." for HIBP
-    var entropyEl2 = document.getElementById('pwdEntropy');
-    if (entropyEl2) {
-        entropyEl2.textContent = (LANG === 'ar' ? 'أنتروبي' : 'Entropy') + ': ' + entropy + ' bits (' + (LANG === 'ar' ? 'فعّال' : 'effective') + ': ' + effectiveEntropy + ' bits)' + '  \u00B7  ' + (LANG === 'ar' ? 'جاري التحقق من قاعدة البيانات...' : 'Checking breach database...');
-    }
+    var crackElPre = document.getElementById('pwd2CrackTime');
+    if (crackElPre) crackElPre.textContent = 'Checking breaches…';
     renderUI(null);
     // null = pending
 

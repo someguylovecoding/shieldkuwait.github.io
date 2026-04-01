@@ -655,34 +655,72 @@
 
   <!-- ══ PAGE: PASSWORD CHECKER ══ -->
   <div class="page" id="page-pwd">
-    <div class="pwd-page">
-      <div class="pwd-hero">
-        <div class="tool-pretag">// PASSWORD CHECKER</div>
-        <h2 class="tool-h2" data-i18n="pwd-title">Password Strength Checker</h2>
-        <p class="tool-sub" data-i18n="pwd-sub">100% client-side — your password is never transmitted or stored.</p>
+    <div class="pc-page">
+      <div class="pc-hero">
+        <div class="pc-hero-icon">
+          <span class="pc-shield">🔐</span>
+          <span class="pc-shield-ring"></span>
+        </div>
+        <div class="tool-pretag">// PASSWORD ANALYZER</div>
+        <h2 class="tool-h2">Password Strength Checker</h2>
+        <p class="tool-sub">Analyze password strength in real-time. 100% local — nothing leaves your device.</p>
+        <div class="tool-stats-row">
+          <div class="tool-stat"><span class="ts-num">13</span><span class="ts-lbl">Security Checks</span></div>
+          <div class="tool-stat"><span class="ts-num">HIBP</span><span class="ts-lbl">Breach Lookup</span></div>
+          <div class="tool-stat"><span class="ts-num">🔒</span><span class="ts-lbl">100% Private</span></div>
+        </div>
       </div>
 
-      <div class="pwd-main">
-        <div class="pwd-input-card">
-          <div class="pwd-field-wrap">
-            <input type="password" id="pwdInput" class="pwd-input" placeholder="Type your password..." oninput="checkPassword()" autocomplete="new-password" spellcheck="false">
-            <button class="pwd-eye" id="pwdEye" onclick="togglePwdVis()" title="Show/hide">👁</button>
+      <div class="pc-main">
+        <div class="pc-input-card">
+          <div class="pc-input-label">🔑 Enter your password</div>
+          <div class="pc-field-row">
+            <input type="password" id="pwdInput" class="pc-input" placeholder="Type or paste a password…" oninput="checkPassword()" autocomplete="new-password" spellcheck="false">
+            <button class="pc-toggle" id="pwdEye" onclick="togglePwdVis()">
+              <span class="pc-toggle-lbl" id="pcToggleLbl">SHOW</span>
+            </button>
           </div>
-          <div class="pwd-bar-wrap">
-            <div class="pwd-bar-track">
-              <div class="pwd-bar-fill" id="pwdBarFill"></div>
-            </div>
+          <div class="pc-bar-row">
+            <div class="pc-seg" id="pcSeg0"></div>
+            <div class="pc-seg" id="pcSeg1"></div>
+            <div class="pc-seg" id="pcSeg2"></div>
+            <div class="pc-seg" id="pcSeg3"></div>
+            <div class="pc-seg" id="pcSeg4"></div>
           </div>
-          <div class="pwd-score-row">
-            <span class="pwd-score-lbl" id="pwdScoreLbl">Enter a password to check</span>
-            <span class="pwd-entropy" id="pwdEntropy"></span>
+          <div class="pc-verdict-row" id="pcVerdictRow" style="display:none">
+            <span class="pc-verdict" id="pcVerdict">—</span>
+            <span class="pc-score" id="pcScore">0/100</span>
           </div>
-          <button class="pwd-gen-btn" onclick="generatePassword()" data-i18n="pwd-gen">⚡ Generate Strong Password</button>
+          <div class="pc-input-hint">🔒 Your password is analyzed locally. Never transmitted or stored.</div>
         </div>
 
-        <div class="pwd-results" id="pwdResults" style="display:none">
-          <div class="pwd-checks-grid" id="pwdChecksGrid"></div>
-          <div class="pwd-tips-card" id="pwdTipsCard"></div>
+        <div class="pc-empty" id="pcEmpty">
+          <p class="pc-empty-msg">Start typing to see real-time analysis</p>
+        </div>
+
+        <div id="pwdResults" class="pc-results">
+          <div class="pc-stats-row">
+            <div class="pc-stat">
+              <div class="pc-stat-val" id="pwd2CrackTime">—</div>
+              <div class="pc-stat-lbl">Crack Time</div>
+            </div>
+            <div class="pc-stat">
+              <div class="pc-stat-val" id="pwd2Entropy">—</div>
+              <div class="pc-stat-lbl">Entropy</div>
+            </div>
+            <div class="pc-stat">
+              <div class="pc-stat-val" id="pwd2Length">—</div>
+              <div class="pc-stat-lbl">Length</div>
+            </div>
+            <div class="pc-stat">
+              <div class="pc-stat-val" id="pcComposition">—</div>
+              <div class="pc-stat-lbl">Composition</div>
+            </div>
+          </div>
+
+          <div class="pc-checks" id="pcChecks"></div>
+
+          <button class="pc-gen-btn" onclick="generatePassword()">⚡ Generate Strong Password</button>
         </div>
       </div>
     </div>
